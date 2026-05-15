@@ -24,168 +24,189 @@
 			background: var(--bg);
 			color: var(--text);
 		}
-
-		main {
-			min-height: 100vh;
-			padding: 24px;
-			display: grid;
-			place-items: center;
+<!doctype html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Portal de Juegos — Juegos Salta</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+	<style>
+		:root{
+			--bg: linear-gradient(180deg,#030511 0%,#071028 100%);
+			--panel:#071026b3;
+			--muted:#98a7c5;
+			--accent:#6b8cff;
+			--glass: rgba(255,255,255,0.02);
 		}
+		*{box-sizing:border-box}
+		body{margin:0;font-family:Segoe UI,system-ui,Arial;background:var(--bg);color:#eaf0ff}
+		.layout{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
 
-		.shell {
-			width: min(100%, 1120px);
-			background: var(--card);
-			border: 1px solid var(--line);
-			backdrop-filter: blur(18px);
-			border-radius: 28px;
-			padding: clamp(22px, 4vw, 42px);
-			box-shadow: 0 24px 70px rgba(2, 6, 23, 0.42);
-		}
+		/* Sidebar */
+		.sidebar{background:rgba(3,6,20,0.65);border-right:1px solid rgba(255,255,255,0.02);padding:22px;display:flex;flex-direction:column;gap:20px}
+		.brand{display:flex;align-items:center;gap:12px}
+		.logo{width:44px;height:44px;border-radius:8px;background:linear-gradient(135deg,#6b8cff,#5dd5ff);display:grid;place-items:center;font-weight:800;color:#071028}
+		.nav{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+		.nav a{color:var(--muted);text-decoration:none;padding:10px;border-radius:10px;display:flex;align-items:center;gap:12px}
+		.nav a.active{background:linear-gradient(90deg, rgba(107,140,255,0.12), rgba(92,213,255,0.03));color:#eaf0ff}
+		.profile{margin-top:auto;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:12px;border-radius:12px;display:flex;align-items:center;gap:12px}
+		.avatar{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#7c5cff,#53b3ff);display:grid;place-items:center}
 
-		header {
-			display: grid;
-			gap: 10px;
-			margin-bottom: 24px;
-		}
+		/* Main */
+		.main{padding:28px}
+		.top{display:flex;justify-content:space-between;align-items:center;gap:20px}
+		.greeting{display:flex;flex-direction:column}
+		.greeting h2{margin:0;font-size:1.6rem}
+		.greeting p{margin:6px 0 0;color:var(--muted)}
 
-		.badge {
-			width: fit-content;
-			padding: 8px 14px;
-			border-radius: 999px;
-			background: rgba(56, 189, 248, 0.12);
-			color: #bae6fd;
-			text-transform: uppercase;
-			letter-spacing: 0.08em;
-			font-size: 0.8rem;
-			font-weight: 700;
-		}
+		.content{margin-top:18px}
+		.section-title{display:flex;align-items:center;justify-content:space-between;gap:12px}
+		.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:12px}
 
-		h1 {
-			margin: 0;
-			font-size: clamp(2.2rem, 4.4vw, 4rem);
-			line-height: 1.02;
-		}
+		.game-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);border-radius:14px;padding:16px;border:1px solid rgba(255,255,255,0.03);display:flex;flex-direction:column;gap:12px;transition:transform .18s ease}
+		.game-card:hover{transform:translateY(-6px)}
+		.game-art{height:150px;border-radius:10px;background:linear-gradient(135deg,#1f1140,#102042);display:grid;place-items:center;color:#fff;font-size:1.1rem}
+		.game-title{font-size:1.05rem;margin:0}
+		.game-desc{color:var(--muted);font-size:0.92rem}
+		.play-row{margin-top:auto;display:flex;justify-content:space-between;align-items:center}
+		.btn-play{background:linear-gradient(180deg,#fff,#eef2f8);color:#111;border-radius:10px;padding:8px 12px;border:0;font-weight:800}
 
-		p {
-			margin: 0;
-			color: var(--muted);
-			line-height: 1.7;
-			max-width: 68ch;
-		}
+		.upcoming{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:18px}
+		.upcoming .placeholder{background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);border-radius:10px;padding:18px;border:1px dashed rgba(255,255,255,0.03);color:var(--muted);display:flex;align-items:center;justify-content:center}
 
-		.grid {
-			display: grid;
-			grid-template-columns: repeat(12, minmax(0, 1fr));
-			gap: 16px;
-		}
-
-		.card {
-			grid-column: span 4;
-			padding: 18px;
-			border-radius: 22px;
-			background: rgba(2, 6, 23, 0.28);
-			border: 1px solid rgba(148, 163, 184, 0.14);
-			text-decoration: none;
-			color: inherit;
-			transition: transform 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
-		}
-
-		.card:hover {
-			transform: translateY(-2px);
-			border-color: rgba(56, 189, 248, 0.45);
-			background: rgba(2, 6, 23, 0.38);
-		}
-
-		.card h2 {
-			margin: 0 0 10px;
-			font-size: 1.15rem;
-		}
-
-		.card span {
-			display: inline-flex;
-			align-items: center;
-			gap: 8px;
-			font-size: 0.9rem;
-			color: var(--muted);
-			margin-bottom: 14px;
-		}
-
-		.card p {
-			font-size: 0.95rem;
-		}
-
-		.tag {
-			display: inline-flex;
-			align-items: center;
-			justify-content: center;
-			padding: 6px 10px;
-			border-radius: 999px;
-			background: rgba(34, 197, 94, 0.12);
-			color: #bbf7d0;
-			font-size: 0.78rem;
-			font-weight: 700;
-			margin-bottom: 14px;
-		}
-
-		.card.placeholder {
-			pointer-events: none;
-			opacity: 0.84;
-		}
-
-		.card.placeholder .tag {
-			background: rgba(250, 204, 21, 0.12);
-			color: #fde68a;
-		}
-
-		.footer {
-			margin-top: 22px;
-			padding-top: 18px;
-			border-top: 1px solid var(--line);
-			color: var(--muted);
-			font-size: 0.92rem;
-		}
-
-		@media (max-width: 920px) {
-			.card { grid-column: span 6; }
-		}
-
-		@media (max-width: 620px) {
-			.card { grid-column: span 12; }
-		}
+		@media(max-width:1100px){.cards{grid-template-columns:repeat(2,1fr)};.upcoming{grid-template-columns:repeat(2,1fr)}.layout{grid-template-columns:1fr}}
+		@media(max-width:640px){.cards{grid-template-columns:1fr}.nav{flex-direction:row;overflow:auto}.sidebar{display:none}}
 	</style>
 </head>
 <body>
-	<main>
-		<section class="shell" aria-labelledby="portal-title">
-			<header>
-				<div class="badge">Portal de juegos</div>
-				<h1 id="portal-title">Elegí un juego y entrá directo a su carpeta.</h1>
-				<p>
-					Este índice concentra todas las experiencias del sitio. Hoy hay un juego listo y el resto quedará preparado para crecer sin tocar el acceso principal.
-				</p>
-			</header>
+	<div class="layout">
+		<aside class="sidebar">
+			<div class="brand"><div class="logo">GP</div><div><strong>GAME<br>PORTAL</strong></div></div>
+			<nav class="nav" aria-label="Navegación">
+				<a class="active" href="#"><i class="fa-solid fa-house"></i> Inicio</a>
+				<a href="#"><i class="fa-solid fa-gamepad"></i> Mis juegos</a>
+				<a href="#"><i class="fa-solid fa-trophy"></i> Logros</a>
+				<a href="#"><i class="fa-solid fa-chart-line"></i> Ranking</a>
+				<a href="#"><i class="fa-solid fa-cog"></i> Ajustes</a>
+			</nav>
 
-			<div class="grid" aria-label="Lista de juegos">
-				<a class="card" href="../Adivina%20un%20numero/index.html">
-					<div class="tag">Disponible</div>
-					<h2>Adivina un número</h2>
-					<span>Juego actual</span>
-					<p>Entrá al desafío y probá suerte con la lógica básica del portal.</p>
-				</a>
+			<div class="profile" aria-hidden="false">
+				<div class="avatar">JD</div>
+				<div>
+					<div style="font-weight:800">Jugador</div>
+					<div style="font-size:0.9rem;color:var(--muted)">Ver perfil</div>
+				</div>
+			</div>
+		</aside>
+
+		<main class="main">
+			<div class="top">
+				<div class="greeting">
+					<h2>¡Hola, Jugador! <span aria-hidden>👋</span></h2>
+					<p>Elige un juego y comienza a jugar</p>
+				</div>
+				<div style="text-align:right">
+					<div style="font-weight:800">Jugador</div>
+					<div style="color:var(--muted);font-size:0.9rem">Ver perfil</div>
+				</div>
+			</div>
+
+			<section class="content">
+				<div class="section-title"><h3>Mis juegos</h3><a href="#" style="color:var(--muted);text-decoration:none">Ver todos →</a></div>
+
+				<div class="cards">
+					<a class="game-card" href="../Adivina%20un%20numero/index.html">
+						<div class="game-art">Adivina el número</div>
+						<h4 class="game-title">Adivina el número</h4>
+						<div class="game-desc">La PC genera un número aleatorio. Pistas: más alto / más bajo.</div>
+						<div class="play-row"><div style="color:var(--muted)">★ 1200</div><button class="btn-play">Jugar</button></div>
+					</a>
+
+					<div class="game-card">
+						<div class="game-art">Piedra, papel o tijera</div>
+						<h4 class="game-title">Piedra, papel o tijera</h4>
+						<div class="game-desc">Usuario vs CPU. Sistema de puntaje y animaciones.</div>
+						<div class="play-row"><div style="color:var(--muted)">★ 950</div><button class="btn-play">Jugar</button></div>
+					</div>
+
+					<div class="game-card">
+						<div class="game-art">Memotest</div>
+						<h4 class="game-title">Memotest</h4>
+						<div class="game-desc">Encontrá pares. Temporizador y contador de movimientos.</div>
+						<div class="play-row"><div style="color:var(--muted)">★ 870</div><button class="btn-play">Jugar</button></div>
+					</div>
+
+					<div class="game-card">
+						<div class="game-art">Snake</div>
+						<h4 class="game-title">Snake</h4>
+						<div class="game-desc">Movimiento con teclado y comida aleatoria.</div>
+						<div class="play-row"><div style="color:var(--muted)">★ 1100</div><button class="btn-play">Jugar</button></div>
+					</div>
+				</div>
+
+				<h4 style="margin-top:22px;color:var(--muted)">Próximamente</h4>
+				<div class="upcoming">
+					<div class="placeholder">Tetris</div>
+					<div class="placeholder">Quiz</div>
+					<div class="placeholder">Batalla Naval</div>
+					<div class="placeholder">Tower Defense</div>
+				</div>
+			</section>
+		</main>
+	</div>
+</body>
+</html>
 
 				<div class="card placeholder" aria-disabled="true">
 					<div class="tag">Próximamente</div>
-					<h2>Memorama</h2>
-					<span>Carpeta futura</span>
-					<p>Cuando exista la carpeta correspondiente, este bloque se convertirá en enlace.</p>
+					<h2>9. Juego de plataformas</h2>
+					<span>Saltos y niveles</span>
+					<p>Practicás física, gravity y hitboxes. Multijugador con Firebase como meta.</p>
 				</div>
 
 				<div class="card placeholder" aria-disabled="true">
 					<div class="tag">Próximamente</div>
-					<h2>Trivia</h2>
-					<span>Carpeta futura</span>
-					<p>Quedó preparado como espacio para un juego más adelante sin cambiar el portal.</p>
+					<h2>10. Adivina colores online</h2>
+					<span>Salas y turnos</span>
+					<p>Ya va con tu estilo. Practicás salas, turnos y chat.</p>
 				</div>
+
+				<div class="card placeholder" aria-disabled="true">
+					<div class="tag">Próximamente</div>
+					<h2>11. Trivia online</h2>
+					<span>Varios jugadores</span>
+					<p>Ranking en tiempo real. Practicás sockets y sincronización.</p>
+				</div>
+
+				<div class="card placeholder" aria-disabled="true">
+					<div class="tag">Próximamente</div>
+					<h2>12. Pictionary / Dibujar y adivinar</h2>
+					<span>Canvas y chat</span>
+					<p>Practicás canvas, chat y WebSockets/Firebase.</p>
+				</div>
+
+				<div class="card placeholder" aria-disabled="true">
+					<div class="tag">Próximamente</div>
+					<h2>13. Simulador de mecánico de motos</h2>
+					<span>Armar/desarmar motor</span>
+					<p>Diagnosticar fallas y comprar repuestos.</p>
+				</div>
+
+				<div class="card placeholder" aria-disabled="true">
+					<div class="tag">Próximamente</div>
+					<h2>14. Juego de supervivencia en Salta</h2>
+					<span>Buscar agua y recursos</span>
+					<p>Clima y recursos. Practicás lógica ambiental y gestión.</p>
+				</div>
+
+				<div class="card placeholder" aria-disabled="true">
+					<div class="tag">Próximamente</div>
+					<h2>15. "Uber Moto"</h2>
+					<span>Llevar pasajeros</span>
+					<p>Evitar tráfico y mejorar la moto. Practicás rutas y físicas simples.</p>
+				</div>
+
 			</div>
 
 			<div class="footer">

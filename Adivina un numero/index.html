@@ -1,173 +1,130 @@
 <!doctype html>
 <html lang="es">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Juegos Salta | Inicio</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Adivina el número — Juegos Salta</title>
 	<style>
-		:root {
-			--bg: radial-gradient(circle at top, rgba(34, 197, 94, 0.18), transparent 30%), radial-gradient(circle at bottom right, rgba(251, 191, 36, 0.16), transparent 28%), linear-gradient(135deg, #06111f 0%, #0f172a 55%, #111827 100%);
-			--card: rgba(15, 23, 42, 0.72);
-			--line: rgba(148, 163, 184, 0.2);
-			--text: #e2e8f0;
-			--muted: #94a3b8;
-			--accent: #22c55e;
+		:root{
+			--bg: radial-gradient(circle at top left, rgba(99,102,241,0.08),transparent 28%), linear-gradient(180deg,#07111f 0%,#0b1220 100%);
+			--card: rgba(6,10,20,0.6);
+			--line: rgba(148,163,184,0.12);
+			--text:#e6eefc;
+			--muted:#9aa6c3;
+			--accent:#6ee7b7;
 		}
+		*{box-sizing:border-box}
+		body{margin:0;min-height:100vh;font-family:Segoe UI,system-ui,Arial;background:var(--bg);color:var(--text);display:grid;place-items:center;padding:24px}
+		.card{width:min(100%,880px);background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent 18%),var(--card);border:1px solid var(--line);border-radius:20px;padding:28px;box-shadow:0 20px 60px rgba(2,6,23,0.6)}
+		.header{display:flex;align-items:center;justify-content:space-between;gap:16px}
+		.meta{display:grid}
+		.badge{background:rgba(110,231,183,0.08);color:var(--accent);padding:6px 10px;border-radius:999px;font-weight:800;text-transform:uppercase;font-size:0.78rem}
+		h1{margin:6px 0 0;font-size:clamp(1.4rem,2.8vw,2.4rem)}
+		p.lead{margin:8px 0 0;color:var(--muted)}
 
-		* { box-sizing: border-box; }
+		.game-area{display:grid;grid-template-columns:1fr 320px;gap:20px;margin-top:18px}
 
-		body {
-			margin: 0;
-			min-height: 100vh;
-			font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-			background: var(--bg);
-			color: var(--text);
-		}
+		.playbox{background:rgba(255,255,255,0.02);padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+		.controls{display:flex;gap:8px;margin-top:12px}
+		input[type=number]{width:140px;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:var(--text);font-size:1rem}
+		button{padding:10px 14px;border-radius:10px;border:0;background:#fff;color:#111;font-weight:700;cursor:pointer}
+		.msg{margin-top:12px;font-weight:700}
+		.hint{color:#9fb7ff;margin-top:8px}
+		.side{display:grid;gap:12px}
+		.panel{background:rgba(255,255,255,0.02);padding:14px;border-radius:10px;border:1px solid rgba(255,255,255,0.03)}
+		.list{display:flex;flex-direction:column;gap:6px;font-size:0.95rem}
+		.small{color:var(--muted);font-size:0.92rem}
 
-		main {
-			min-height: 100vh;
-			display: grid;
-			place-items: center;
-			padding: 24px;
-		}
-
-		.card {
-			width: min(100%, 920px);
-			background: var(--card);
-			border: 1px solid var(--line);
-			backdrop-filter: blur(18px);
-			border-radius: 28px;
-			padding: clamp(24px, 4vw, 44px);
-			box-shadow: 0 24px 70px rgba(2, 6, 23, 0.45);
-		}
-
-		.hero {
-			display: grid;
-			gap: 20px;
-		}
-
-		.badge {
-			width: fit-content;
-			padding: 8px 14px;
-			border-radius: 999px;
-			background: rgba(34, 197, 94, 0.15);
-			color: #86efac;
-			font-size: 0.82rem;
-			letter-spacing: 0.08em;
-			text-transform: uppercase;
-			font-weight: 700;
-		}
-
-		h1 {
-			margin: 0;
-			font-size: clamp(2.4rem, 5vw, 4.8rem);
-			line-height: 1;
-			max-width: 12ch;
-		}
-
-		p {
-			margin: 0;
-			max-width: 62ch;
-			color: var(--muted);
-			font-size: 1.03rem;
-			line-height: 1.7;
-		}
-
-		.actions {
-			display: flex;
-			flex-wrap: wrap;
-			gap: 12px;
-			margin-top: 8px;
-		}
-
-		.btn {
-			display: inline-flex;
-			align-items: center;
-			justify-content: center;
-			min-height: 46px;
-			padding: 0 18px;
-			border-radius: 14px;
-			text-decoration: none;
-			font-weight: 700;
-			border: 1px solid transparent;
-			transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
-		}
-
-		.btn:hover { transform: translateY(-1px); }
-
-		.btn-primary {
-			background: linear-gradient(135deg, var(--accent), #84cc16);
-			color: #052e16;
-		}
-
-		.btn-secondary {
-			background: transparent;
-			border-color: var(--line);
-			color: var(--text);
-		}
-
-		.grid {
-			display: grid;
-			grid-template-columns: repeat(3, minmax(0, 1fr));
-			gap: 16px;
-			margin-top: 28px;
-		}
-
-		.panel {
-			padding: 18px;
-			border-radius: 20px;
-			background: rgba(2, 6, 23, 0.32);
-			border: 1px solid rgba(148, 163, 184, 0.16);
-		}
-
-		.panel strong {
-			display: block;
-			margin-bottom: 8px;
-			font-size: 1rem;
-		}
-
-		.panel span {
-			color: var(--muted);
-			font-size: 0.95rem;
-			line-height: 1.5;
-		}
-
-		@media (max-width: 780px) {
-			.grid { grid-template-columns: 1fr; }
-			h1 { max-width: none; }
-		}
+		@media(max-width:880px){.game-area{grid-template-columns:1fr}.side{order:2}}
 	</style>
 </head>
 <body>
 	<main>
-		<section class="card" aria-labelledby="home-title">
-			<div class="hero">
-				<div class="badge">Juegos Salta</div>
-				<h1 id="home-title">Tu cuenta está lista para jugar.</h1>
-				<p>
-					Registrate para guardar tu progreso, volver a entrar desde cualquier equipo y entrar al desafío de adivinar el número cuando quieras.
-				</p>
-				<div class="actions">
-					<a class="btn btn-primary" href="../modulos/login/login.html">Entrar a mi cuenta</a>
-					<a class="btn btn-secondary" href="../modulos/login/register.html">Crear otra cuenta</a>
+		<section class="card" aria-labelledby="game-title">
+			<div class="header">
+				<div class="meta">
+					<div class="badge">Adivina el número</div>
+					<h1 id="game-title">Adivina el número</h1>
+					<p class="lead">La PC genera un número aleatorio. Intentá adivinarlo. Recibirás pistas: "más alto" o "más bajo".</p>
 				</div>
+				<div class="small">Practicas: <strong>Math.random()</strong>, eventos, inputs, condicionales</div>
 			</div>
 
-			<div class="grid" aria-label="Ventajas de la cuenta">
-				<div class="panel">
-					<strong>Progreso guardado</strong>
-					<span>Tu perfil queda listo para conectar partidas, puntajes y futuras funciones del sitio.</span>
+			<div class="game-area">
+				<div class="playbox">
+					<div>
+						<label for="guess">Elegí un número (1-100)</label>
+						<div class="controls">
+							<input id="guess" type="number" min="1" max="100" placeholder="Tu intento" />
+							<button id="btn-try">Probar</button>
+							<button id="btn-reset" style="background:transparent;color:var(--text);border:1px solid rgba(255,255,255,0.06)">Reiniciar</button>
+						</div>
+						<div id="message" class="msg" aria-live="polite"></div>
+						<div id="hint" class="hint"></div>
+					</div>
+
+					<div style="margin-top:14px">
+						<div class="small">Intentos: <span id="attempts">0</span></div>
+						<div class="small">Historial:</div>
+						<div id="history" class="list"></div>
+					</div>
 				</div>
-				<div class="panel">
-					<strong>Acceso rápido</strong>
-					<span>Podés entrar con correo o Google usando el mismo flujo de autenticación.</span>
-				</div>
-				<div class="panel">
-					<strong>Base Firebase</strong>
-					<span>La cuenta se registra en Firebase y el perfil se guarda en Firestore.</span>
-				</div>
+
+				<aside class="side">
+					<div class="panel">
+						<strong>Cómo funciona</strong>
+						<div class="small">El equipo elige un número entre 1 y 100. Ingresá tus intentos y el sistema te dirá si debes probar más alto o más bajo.</div>
+					</div>
+
+					<div class="panel">
+						<strong>Sugerencias</strong>
+						<div class="small">Usá binsearch mental: cada intento puede dividir el rango y reducir los intentos necesarios.</div>
+					</div>
+
+					<div class="panel">
+						<a href="../juegos/index.html" style="color:var(--muted);text-decoration:none">🔙 Volver al portal</a>
+					</div>
+				</aside>
 			</div>
 		</section>
 	</main>
+
+	<script>
+		(function(){
+			const max = 100;
+			let secret = Math.floor(Math.random()*max)+1;
+			let attempts = 0;
+			const guessInput = document.getElementById('guess');
+			const btnTry = document.getElementById('btn-try');
+			const btnReset = document.getElementById('btn-reset');
+			const msg = document.getElementById('message');
+			const hint = document.getElementById('hint');
+			const attemptsEl = document.getElementById('attempts');
+			const historyEl = document.getElementById('history');
+
+			function setMessage(text, ok){ msg.textContent = text; msg.style.color = ok? '#8ef' : '#ffb4b4'; }
+
+			function addHistory(v){ const el = document.createElement('div'); el.textContent = v; historyEl.prepend(el); }
+
+			function doTry(){
+				const val = Number(guessInput.value);
+				if(!val || val<1 || val>max){ setMessage('Ingresá un número entre 1 y '+max,false); return; }
+				attempts++;
+				attemptsEl.textContent = attempts;
+				addHistory('Intento '+attempts+': '+val);
+				if(val === secret){ setMessage('¡Correcto! Encontraste el número '+secret, true); hint.textContent = '';
+					btnTry.disabled = true; guessInput.disabled = true;
+					return;
+				}
+				if(val < secret){ hint.textContent = 'Más alto'; setMessage('No es correcto.', false); }
+				else { hint.textContent = 'Más bajo'; setMessage('No es correcto.', false); }
+			}
+
+			btnTry.addEventListener('click', doTry);
+			guessInput.addEventListener('keydown', function(e){ if(e.key === 'Enter') doTry(); });
+
+			btnReset.addEventListener('click', function(){ secret = Math.floor(Math.random()*max)+1; attempts = 0; attemptsEl.textContent = '0'; historyEl.innerHTML = ''; msg.textContent = ''; hint.textContent = ''; guessInput.value=''; guessInput.disabled = false; btnTry.disabled = false; });
+		})();
+	</script>
 </body>
 </html>
