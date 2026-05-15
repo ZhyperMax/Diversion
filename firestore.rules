@@ -1,0 +1,206 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /* =========================
+       FUNCIONES GENERALES
+    ========================== */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function userDoc(uid) {
+      return get(/databases/$(database)/documents/users/$(uid));
+    }
+
+    function isAdmin() {
+      return isSignedIn() &&
+        userDoc(request.auth.uid).data.role == "admin";
+    }
+
+    function isMod() {
+      return isSignedIn() &&
+        (
+          userDoc(request.auth.uid).data.role == "mod" ||
+          userDoc(request.auth.uid).data.role == "admin"
+        );
+    }
+
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    /* =========================
+       USERS / PERFILES
+    ========================== */
+    match /users/{userId} {
+
+      // Leer perfiles públicos
+      allow read: if true;
+
+      // Crear perfil propio al registrarse
+      allow create: if isOwner(userId);
+
+      // Usuario modifica solo sus datos permitidos
+      allow update: if isOwner(userId) &&
+        !("role" in request.resource.data);
+
+      // Admin puede editar todo
+      allow update, delete: if isAdmin();
+
+      /* =========================
+         ESTADÍSTICAS POR JUEGO
+      ========================== */
+      match /stats/{gameId} {
+        allow read: if true;
+
+        // Usuario solo actualiza sus stats
+        allow create, update: if isOwner(userId);
+
+        // Admin/mod pueden moderar
+        allow delete: if isMod();
+      }
+    }
+
+    /* =========================
+       JUEGOS
+       /games/adivina-numero
+       /games/trivia-online
+    ========================== */
+    match /games/{gameId} {
+
+      // Información pública del juego
+      allow read: if true;
+
+      // Solo admin/mod crean o editan configuración
+      allow create, update, delete: if isMod();
+
+      /* =========================
+         RANKINGS GLOBALES
+      ========================== */
+      match /leaderboards/{mode} {
+        allow read: if true;
+
+        // Solo sistema/admin/mod
+        allow write: if isMod();
+      }
+
+      /* =========================
+         SALAS MULTIJUGADOR
+      ========================== */
+      match /rooms/{roomId} {
+
+        // Ver sala si autenticado
+        allow read: if isSignedIn();
+
+        // Crear sala
+        allow create: if isSignedIn();
+
+        // Host, mod o admin actualiza
+        allow update: if isSignedIn() &&
+          (
+            resource.data.hostId == request.auth.uid ||
+            isMod()
+          );
+
+        // Host o admin elimina
+        allow delete: if isSignedIn() &&
+          (
+            resource.data.hostId == request.auth.uid ||
+            isAdmin()
+          );
+
+        /* =========================
+           JUGADORES EN SALA
+        ========================== */
+        match /players/{playerId} {
+
+          allow read: if isSignedIn();
+
+          // Usuario entra a sí mismo
+          allow create: if isOwner(playerId);
+
+          // Usuario actualiza su estado
+          allow update: if isOwner(playerId);
+
+          // Host/mod/admin puede expulsar
+          allow delete: if isOwner(playerId) ||
+            (
+              get(/databases/$(database)/documents/games/$(gameId)/rooms/$(roomId)).data.hostId
+              == request.auth.uid
+            ) ||
+            isMod();
+        }
+
+        /* =========================
+           CHAT DE SALA
+        ========================== */
+        match /chat/{messageId} {
+
+          allow read: if isSignedIn();
+
+          // Enviar mensaje
+          allow create: if isSignedIn() &&
+            request.resource.data.uid == request.auth.uid;
+
+          // Solo autor/mod/admin borra
+          allow delete: if isSignedIn() &&
+            (
+              resource.data.uid == request.auth.uid ||
+              isMod()
+            );
+
+          // No editar mensajes
+          allow update: if false;
+        }
+
+        /* =========================
+           PARTIDA / ESTADO
+        ========================== */
+        match /gameState/{stateId} {
+          allow read: if isSignedIn();
+
+          // Solo host o sistema
+          allow write: if isSignedIn() &&
+            (
+              get(/databases/$(database)/documents/games/$(gameId)/rooms/$(roomId)).data.hostId
+              == request.auth.uid ||
+              isMod()
+            );
+        }
+      }
+    }
+
+    /* =========================
+       REPORTES / MODERACIÓN
+    ========================== */
+    match /reports/{reportId} {
+
+      // Usuarios reportan
+      allow create: if isSignedIn();
+
+      // Mods/admin leen
+      allow read: if isMod();
+
+      // Mods/admin gestionan
+      allow update, delete: if isMod();
+    }
+
+    /* =========================
+       CONFIGURACIÓN GLOBAL
+    ========================== */
+    match /config/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    /* =========================
+       LOGS ADMIN
+    ========================== */
+    match /adminLogs/{logId} {
+      allow read: if isAdmin();
+      allow write: if isAdmin();
+    }
+  }
+}
