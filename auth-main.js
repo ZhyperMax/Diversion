@@ -6,10 +6,7 @@ import { createLoginModule } from "./modulos/login/login.module.js";
 const loginApp = createLoginModule({
 	init: initFirebase,
 	guardGuestPage: () => guardGuestPage({ homePath: "./juegos/index.html" }),
-	onEmailLogin: ({ email, password }) => signIn(email, password),
 	onGoogleLogin: () => signInWithGoogle(),
-	onPasswordReset: (email) => requestPasswordReset(email),
 	redirect: () => redirectToHomeByRole("./juegos/index.html")
 });
-
 loginApp.bootstrap();
