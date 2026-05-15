@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Juegos Salta | Inicio</title>
+	<style>
+		:root {
+			--bg: radial-gradient(circle at top, rgba(34, 197, 94, 0.18), transparent 30%), radial-gradient(circle at bottom right, rgba(251, 191, 36, 0.16), transparent 28%), linear-gradient(135deg, #06111f 0%, #0f172a 55%, #111827 100%);
+			--card: rgba(15, 23, 42, 0.72);
+			--line: rgba(148, 163, 184, 0.2);
+			--text: #e2e8f0;
+			--muted: #94a3b8;
+			--accent: #22c55e;
+		}
+
+		* { box-sizing: border-box; }
+
+		body {
+			margin: 0;
+			min-height: 100vh;
+			font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+			background: var(--bg);
+			color: var(--text);
+		}
+
+		main {
+			min-height: 100vh;
+			display: grid;
+			place-items: center;
+			padding: 24px;
+		}
+
+		.card {
+			width: min(100%, 920px);
+			background: var(--card);
+			border: 1px solid var(--line);
+			backdrop-filter: blur(18px);
+			border-radius: 28px;
+			padding: clamp(24px, 4vw, 44px);
+			box-shadow: 0 24px 70px rgba(2, 6, 23, 0.45);
+		}
+
+		.hero {
+			display: grid;
+			gap: 20px;
+		}
+
+		.badge {
+			width: fit-content;
+			padding: 8px 14px;
+			border-radius: 999px;
+			background: rgba(34, 197, 94, 0.15);
+			color: #86efac;
+			font-size: 0.82rem;
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+			font-weight: 700;
+		}
+
+		h1 {
+			margin: 0;
+			font-size: clamp(2.4rem, 5vw, 4.8rem);
+			line-height: 1;
+			max-width: 12ch;
+		}
+
+		p {
+			margin: 0;
+			max-width: 62ch;
+			color: var(--muted);
+			font-size: 1.03rem;
+			line-height: 1.7;
+		}
+
+		.actions {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 12px;
+			margin-top: 8px;
+		}
+
+		.btn {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			min-height: 46px;
+			padding: 0 18px;
+			border-radius: 14px;
+			text-decoration: none;
+			font-weight: 700;
+			border: 1px solid transparent;
+			transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+		}
+
+		.btn:hover { transform: translateY(-1px); }
+
+		.btn-primary {
+			background: linear-gradient(135deg, var(--accent), #84cc16);
+			color: #052e16;
+		}
+
+		.btn-secondary {
+			background: transparent;
+			border-color: var(--line);
+			color: var(--text);
+		}
+
+		.grid {
+			display: grid;
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			gap: 16px;
+			margin-top: 28px;
+		}
+
+		.panel {
+			padding: 18px;
+			border-radius: 20px;
+			background: rgba(2, 6, 23, 0.32);
+			border: 1px solid rgba(148, 163, 184, 0.16);
+		}
+
+		.panel strong {
+			display: block;
+			margin-bottom: 8px;
+			font-size: 1rem;
+		}
+
+		.panel span {
+			color: var(--muted);
+			font-size: 0.95rem;
+			line-height: 1.5;
+		}
+
+		@media (max-width: 780px) {
+			.grid { grid-template-columns: 1fr; }
+			h1 { max-width: none; }
+		}
+	</style>
+</head>
+<body>
+	<main>
+		<section class="card" aria-labelledby="home-title">
+			<div class="hero">
+				<div class="badge">Juegos Salta</div>
+				<h1 id="home-title">Tu cuenta está lista para jugar.</h1>
+				<p>
+					Registrate para guardar tu progreso, volver a entrar desde cualquier equipo y entrar al desafío de adivinar el número cuando quieras.
+				</p>
+				<div class="actions">
+					<a class="btn btn-primary" href="../modulos/login/login.html">Entrar a mi cuenta</a>
+					<a class="btn btn-secondary" href="../modulos/login/register.html">Crear otra cuenta</a>
+				</div>
+			</div>
+
+			<div class="grid" aria-label="Ventajas de la cuenta">
+				<div class="panel">
+					<strong>Progreso guardado</strong>
+					<span>Tu perfil queda listo para conectar partidas, puntajes y futuras funciones del sitio.</span>
+				</div>
+				<div class="panel">
+					<strong>Acceso rápido</strong>
+					<span>Podés entrar con correo o Google usando el mismo flujo de autenticación.</span>
+				</div>
+				<div class="panel">
+					<strong>Base Firebase</strong>
+					<span>La cuenta se registra en Firebase y el perfil se guarda en Firestore.</span>
+				</div>
+			</div>
+		</section>
+	</main>
+</body>
+</html>
