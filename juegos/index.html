@@ -1,88 +1,362 @@
 <!doctype html>
 <html lang="es">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Juegos Salta | Portal de juegos</title>
-	<style>
-		:root {
-			--bg: radial-gradient(circle at top, rgba(96, 165, 250, 0.18), transparent 28%), radial-gradient(circle at bottom left, rgba(34, 197, 94, 0.14), transparent 26%), linear-gradient(135deg, #07111f 0%, #0f172a 50%, #111827 100%);
-			--card: rgba(15, 23, 42, 0.74);
-			--line: rgba(148, 163, 184, 0.18);
-			--text: #e2e8f0;
-			--muted: #94a3b8;
-			--accent: #38bdf8;
-			--accent-2: #22c55e;
-		}
-
-		* { box-sizing: border-box; }
-
-		body {
-			margin: 0;
-			min-height: 100vh;
-			font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-			background: var(--bg);
-			color: var(--text);
-		}
-<!doctype html>
-<html lang="es">
-<head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<title>Portal de Juegos — Juegos Salta</title>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
 	<style>
-		:root{
-			--bg: linear-gradient(180deg,#030511 0%,#071028 100%);
-			--panel:#071026b3;
-			--muted:#98a7c5;
-			--accent:#6b8cff;
-			--glass: rgba(255,255,255,0.02);
+		:root {
+			--bg: linear-gradient(180deg, #030511 0%, #071028 100%);
+			--muted: #98a7c5;
+			--line: rgba(255, 255, 255, 0.04);
 		}
-		*{box-sizing:border-box}
-		body{margin:0;font-family:Segoe UI,system-ui,Arial;background:var(--bg);color:#eaf0ff}
-		.layout{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
 
-		/* Sidebar */
-		.sidebar{background:rgba(3,6,20,0.65);border-right:1px solid rgba(255,255,255,0.02);padding:22px;display:flex;flex-direction:column;gap:20px}
-		.brand{display:flex;align-items:center;gap:12px}
-		.logo{width:44px;height:44px;border-radius:8px;background:linear-gradient(135deg,#6b8cff,#5dd5ff);display:grid;place-items:center;font-weight:800;color:#071028}
-		.nav{display:flex;flex-direction:column;gap:10px;margin-top:12px}
-		.nav a{color:var(--muted);text-decoration:none;padding:10px;border-radius:10px;display:flex;align-items:center;gap:12px}
-		.nav a.active{background:linear-gradient(90deg, rgba(107,140,255,0.12), rgba(92,213,255,0.03));color:#eaf0ff}
-		.profile{margin-top:auto;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:12px;border-radius:12px;display:flex;align-items:center;gap:12px}
-		.avatar{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#7c5cff,#53b3ff);display:grid;place-items:center}
+		* {
+			box-sizing: border-box;
+		}
 
-		/* Main */
-		.main{padding:28px}
-		.top{display:flex;justify-content:space-between;align-items:center;gap:20px}
-		.greeting{display:flex;flex-direction:column}
-		.greeting h2{margin:0;font-size:1.6rem}
-		.greeting p{margin:6px 0 0;color:var(--muted)}
+		body {
+			margin: 0;
+			font-family: Segoe UI, system-ui, Arial, sans-serif;
+			background: var(--bg);
+			color: #eaf0ff;
+		}
 
-		.content{margin-top:18px}
-		.section-title{display:flex;align-items:center;justify-content:space-between;gap:12px}
-		.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:12px}
+		.layout {
+			display: grid;
+			grid-template-columns: 260px 1fr;
+			min-height: 100vh;
+		}
 
-		.game-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);border-radius:14px;padding:16px;border:1px solid rgba(255,255,255,0.03);display:flex;flex-direction:column;gap:12px;transition:transform .18s ease}
-		.game-card:hover{transform:translateY(-6px)}
-		.game-art{height:150px;border-radius:10px;background:linear-gradient(135deg,#1f1140,#102042);display:grid;place-items:center;color:#fff;font-size:1.1rem}
-		.game-title{font-size:1.05rem;margin:0}
-		.game-desc{color:var(--muted);font-size:0.92rem}
-		.play-row{margin-top:auto;display:flex;justify-content:space-between;align-items:center}
-		.btn-play{background:linear-gradient(180deg,#fff,#eef2f8);color:#111;border-radius:10px;padding:8px 12px;border:0;font-weight:800}
+		.sidebar {
+			background: rgba(3, 6, 20, 0.72);
+			border-right: 1px solid var(--line);
+			padding: 22px;
+			display: flex;
+			flex-direction: column;
+			gap: 20px;
+		}
 
-		.upcoming{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:18px}
-		.upcoming .placeholder{background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);border-radius:10px;padding:18px;border:1px dashed rgba(255,255,255,0.03);color:var(--muted);display:flex;align-items:center;justify-content:center}
+		.brand {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+		}
 
-		@media(max-width:1100px){.cards{grid-template-columns:repeat(2,1fr)};.upcoming{grid-template-columns:repeat(2,1fr)}.layout{grid-template-columns:1fr}}
-		@media(max-width:640px){.cards{grid-template-columns:1fr}.nav{flex-direction:row;overflow:auto}.sidebar{display:none}}
+		.logo {
+			width: 44px;
+			height: 44px;
+			border-radius: 12px;
+			background: linear-gradient(135deg, #6b8cff, #5dd5ff);
+			display: grid;
+			place-items: center;
+			font-weight: 900;
+			color: #071028;
+		}
+
+		.nav {
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+			margin-top: 12px;
+		}
+
+		.nav a {
+			color: var(--muted);
+			text-decoration: none;
+			padding: 10px;
+			border-radius: 12px;
+			display: flex;
+			align-items: center;
+			gap: 12px;
+		}
+
+		.nav a.active {
+			background: linear-gradient(90deg, rgba(107, 140, 255, 0.18), rgba(92, 213, 255, 0.04));
+			color: #eaf0ff;
+		}
+
+		.profile {
+			margin-top: auto;
+			background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent);
+			padding: 12px;
+			border-radius: 14px;
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			border: 1px solid var(--line);
+		}
+
+		.avatar {
+			width: 48px;
+			height: 48px;
+			border-radius: 14px;
+			background: linear-gradient(135deg, #7c5cff, #53b3ff);
+			display: grid;
+			place-items: center;
+			font-weight: 800;
+		}
+
+		.main {
+			padding: 28px;
+		}
+
+		.top {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			gap: 20px;
+			padding-bottom: 22px;
+			border-bottom: 1px solid var(--line);
+		}
+
+		.greeting h2 {
+			margin: 0;
+			font-size: 1.6rem;
+		}
+
+		.greeting p {
+			margin: 6px 0 0;
+			color: var(--muted);
+		}
+
+		.user-chip {
+			padding: 14px 18px;
+			border-radius: 16px;
+			background: rgba(255, 255, 255, 0.03);
+			border: 1px solid var(--line);
+			min-width: 180px;
+			text-align: right;
+		}
+
+		.content {
+			margin-top: 18px;
+		}
+
+		.section-title {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 12px;
+			margin-bottom: 12px;
+		}
+
+		.section-title h3,
+		.section-title h4 {
+			margin: 0;
+		}
+
+		.cards,
+		.more-grid {
+			display: grid;
+			gap: 18px;
+		}
+
+		.cards {
+			grid-template-columns: repeat(4, 1fr);
+			margin-top: 12px;
+		}
+
+		.more-grid {
+			grid-template-columns: repeat(3, 1fr);
+			margin-top: 12px;
+		}
+
+		.game-card {
+			background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent);
+			border-radius: 16px;
+			padding: 16px;
+			border: 1px solid rgba(255, 255, 255, 0.04);
+			display: flex;
+			flex-direction: column;
+			gap: 12px;
+			transition: transform 0.18s ease, border-color 0.18s ease;
+			min-height: 320px;
+		}
+
+		.game-card:hover {
+			transform: translateY(-4px);
+			border-color: rgba(107, 140, 255, 0.34);
+		}
+
+		.game-card.playable {
+			text-decoration: none;
+			color: inherit;
+		}
+
+		.game-art {
+			height: 150px;
+			border-radius: 14px;
+			position: relative;
+			overflow: hidden;
+			display: grid;
+			place-items: center;
+			border: 1px solid rgba(255, 255, 255, 0.06);
+		}
+
+		.game-art img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			display: block;
+			border-radius: 12px;
+		}
+
+		.game-art::before,
+		.game-art::after {
+			content: "";
+			position: absolute;
+			border-radius: 999px;
+			opacity: 0.8;
+		}
+
+		.game-art::before {
+			width: 72px;
+			height: 72px;
+			right: 14px;
+			top: 14px;
+			background: rgba(255, 255, 255, 0.05);
+			filter: blur(1px);
+		}
+
+		.game-art::after {
+			width: 16px;
+			height: 16px;
+			left: 18px;
+			bottom: 18px;
+			background: rgba(255, 255, 255, 0.16);
+		}
+
+		.art-icon {
+			position: relative;
+			z-index: 1;
+			font-size: 3rem;
+			color: #fff;
+			text-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+		}
+
+		.art-line {
+			position: absolute;
+			inset: auto 14px 14px 14px;
+			height: 34px;
+			border-radius: 12px;
+			background: rgba(255, 255, 255, 0.04);
+		}
+
+		.game-title {
+			font-size: 1.05rem;
+			margin: 0;
+		}
+
+		.game-desc {
+			color: var(--muted);
+			font-size: 0.92rem;
+			line-height: 1.55;
+		}
+
+		.play-row {
+			margin-top: auto;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			gap: 12px;
+		}
+
+		.btn-play {
+			background: linear-gradient(180deg, #fff, #eef2f8);
+			color: #111;
+			border-radius: 10px;
+			padding: 9px 14px;
+			border: 0;
+			font-weight: 800;
+			text-decoration: none;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.btn-play.disabled {
+			background: rgba(255, 255, 255, 0.08);
+			color: #d6deef;
+			cursor: not-allowed;
+			pointer-events: none;
+		}
+
+		.score {
+			color: var(--muted);
+			font-size: 0.92rem;
+		}
+
+		.art-ring {
+			width: 108px;
+			height: 108px;
+			border-radius: 50%;
+			display: grid;
+			place-items: center;
+			background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.12), transparent 35%), rgba(255, 255, 255, 0.05);
+			border: 1px solid rgba(255, 255, 255, 0.08);
+		}
+
+		.art-ring i {
+			font-size: 2.1rem;
+		}
+
+		.ring-purple { background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.12), transparent 35%), linear-gradient(135deg, rgba(102, 51, 255, 0.55), rgba(141, 101, 255, 0.25)); }
+		.ring-blue { background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.12), transparent 35%), linear-gradient(135deg, rgba(34, 128, 255, 0.55), rgba(28, 76, 155, 0.25)); }
+		.ring-green { background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.12), transparent 35%), linear-gradient(135deg, rgba(16, 185, 129, 0.58), rgba(10, 103, 76, 0.22)); }
+		.ring-orange { background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.12), transparent 35%), linear-gradient(135deg, rgba(255, 153, 0, 0.55), rgba(145, 76, 10, 0.22)); }
+
+		@media (max-width: 1180px) {
+			.cards,
+			.more-grid {
+				grid-template-columns: repeat(2, 1fr);
+			}
+
+			.layout {
+				grid-template-columns: 1fr;
+			}
+
+			.sidebar {
+				display: none;
+			}
+		}
+
+		@media (max-width: 640px) {
+			.main {
+				padding: 18px;
+			}
+
+			.top {
+				flex-direction: column;
+				align-items: flex-start;
+			}
+
+			.user-chip {
+				text-align: left;
+				min-width: 0;
+				width: 100%;
+			}
+
+			.cards,
+			.more-grid {
+				grid-template-columns: 1fr;
+			}
+
+			.game-card {
+				min-height: auto;
+			}
+		}
 	</style>
 </head>
 <body>
 	<div class="layout">
 		<aside class="sidebar">
-			<div class="brand"><div class="logo">GP</div><div><strong>GAME<br>PORTAL</strong></div></div>
+			<div class="brand">
+				<div class="logo">GP</div>
+				<div><strong>GAME<br>PORTAL</strong></div>
+			</div>
+
 			<nav class="nav" aria-label="Navegación">
 				<a class="active" href="#"><i class="fa-solid fa-house"></i> Inicio</a>
 				<a href="#"><i class="fa-solid fa-gamepad"></i> Mis juegos</a>
@@ -91,7 +365,7 @@
 				<a href="#"><i class="fa-solid fa-cog"></i> Ajustes</a>
 			</nav>
 
-			<div class="profile" aria-hidden="false">
+			<div class="profile">
 				<div class="avatar">JD</div>
 				<div>
 					<div style="font-weight:800">Jugador</div>
@@ -106,113 +380,155 @@
 					<h2>¡Hola, Jugador! <span aria-hidden>👋</span></h2>
 					<p>Elige un juego y comienza a jugar</p>
 				</div>
-				<div style="text-align:right">
+				<div class="user-chip">
 					<div style="font-weight:800">Jugador</div>
 					<div style="color:var(--muted);font-size:0.9rem">Ver perfil</div>
 				</div>
 			</div>
 
 			<section class="content">
-				<div class="section-title"><h3>Mis juegos</h3><a href="#" style="color:var(--muted);text-decoration:none">Ver todos →</a></div>
+				<div class="section-title">
+					<h3>Mis juegos</h3>
+					<a href="#" style="color:var(--muted);text-decoration:none">Ver todos →</a>
+				</div>
 
 				<div class="cards">
-					<a class="game-card" href="../Adivina%20un%20numero/index.html">
-						<div class="game-art">Adivina el número</div>
+					<a class="game-card playable" href="../Adivina%20un%20numero/index.html">
+						<div class="game-art" style="background: linear-gradient(135deg,#24124b,#102042);">
+							<img src="../img/adivina%20el%20numero.png" alt="Adivina el número">
+						</div>
 						<h4 class="game-title">Adivina el número</h4>
 						<div class="game-desc">La PC genera un número aleatorio. Pistas: más alto / más bajo.</div>
-						<div class="play-row"><div style="color:var(--muted)">★ 1200</div><button class="btn-play">Jugar</button></div>
+						<div class="play-row"><div class="score">★ 1200</div><span class="btn-play">Jugar</span></div>
 					</a>
 
 					<div class="game-card">
-						<div class="game-art">Piedra, papel o tijera</div>
+						<div class="game-art" style="background: linear-gradient(135deg,#09235f,#1b5fcf);">
+							<img src="../img/p%C3%ADedrapateltijera.png" alt="Piedra Papel Tijera">
+						</div>
 						<h4 class="game-title">Piedra, papel o tijera</h4>
 						<div class="game-desc">Usuario vs CPU. Sistema de puntaje y animaciones.</div>
-						<div class="play-row"><div style="color:var(--muted)">★ 950</div><button class="btn-play">Jugar</button></div>
+						<div class="play-row"><div class="score">★ 950</div><span class="btn-play disabled">Jugar</span></div>
 					</div>
 
 					<div class="game-card">
-						<div class="game-art">Memotest</div>
+						<div class="game-art" style="background: linear-gradient(135deg,#0a3b27,#0e7b3d);">
+							<img src="../img/memotest.png" alt="Memotest">
+						</div>
 						<h4 class="game-title">Memotest</h4>
 						<div class="game-desc">Encontrá pares. Temporizador y contador de movimientos.</div>
-						<div class="play-row"><div style="color:var(--muted)">★ 870</div><button class="btn-play">Jugar</button></div>
+						<div class="play-row"><div class="score">★ 870</div><span class="btn-play disabled">Jugar</span></div>
 					</div>
 
 					<div class="game-card">
-						<div class="game-art">Snake</div>
+						<div class="game-art" style="background: linear-gradient(135deg,#6a2b10,#d97706);">
+							<img src="../img/snake.png" alt="Snake">
+						</div>
 						<h4 class="game-title">Snake</h4>
 						<div class="game-desc">Movimiento con teclado y comida aleatoria.</div>
-						<div class="play-row"><div style="color:var(--muted)">★ 1100</div><button class="btn-play">Jugar</button></div>
+						<div class="play-row"><div class="score">★ 1100</div><span class="btn-play disabled">Jugar</span></div>
 					</div>
 				</div>
 
-				<h4 style="margin-top:22px;color:var(--muted)">Próximamente</h4>
-				<div class="upcoming">
-					<div class="placeholder">Tetris</div>
-					<div class="placeholder">Quiz</div>
-					<div class="placeholder">Batalla Naval</div>
-					<div class="placeholder">Tower Defense</div>
+				<div style="margin-top:22px;display:flex;align-items:center;justify-content:space-between;gap:12px">
+					<h4 style="margin:0;color:var(--muted)">Más juegos</h4>
+				</div>
+
+				<div class="more-grid">
+					<div class="game-card">
+						<div class="game-art" style="background: linear-gradient(135deg,#1f2a62,#111827);">
+							<img src="../img/tetris.png" alt="Tetris">
+							</div>
+						<h4 class="game-title">Tetris básico</h4>
+						<div class="game-desc">Piezas, rotación y colisiones. Practicás matrices y renderizado.</div>
+						<div class="play-row"><div class="score">★ 1000</div><span class="btn-play disabled">Jugar</span></div>
+					</div>
+
+					<div class="game-card">
+						<div class="game-art" style="background: linear-gradient(135deg,#0b2247,#123f8f);">
+							<img src="../img/quiz.png" alt="Quiz">
+							</div>
+						<h4 class="game-title">Quiz interactivo</h4>
+						<div class="game-desc">Preguntas aleatorias, tiempo por respuesta y ranking.</div>
+						<div class="play-row"><div class="score">★ 920</div><span class="btn-play disabled">Jugar</span></div>
+					</div>
+
+					<div class="game-card">
+						<div class="game-art" style="background: linear-gradient(135deg,#0b3a2c,#0d6d45);">
+							<img src="../img/batalla%20naval.png" alt="Batalla naval">
+							</div>
+						<h4 class="game-title">Batalla naval</h4>
+						<div class="game-desc">Tablero, jugador vs CPU e IA básica. Arrays 2D y estrategia.</div>
+						<div class="play-row"><div class="score">★ 980</div><span class="btn-play disabled">Jugar</span></div>
+					</div>
+
+					<div class="game-card">
+						<div class="game-art" style="background: linear-gradient(135deg,#5c2a06,#d97706);">
+							<img src="../img/tower%20defense.png" alt="Tower Defense">
+							</div>
+						<h4 class="game-title">Tower Defense simple</h4>
+						<div class="game-desc">Enemigos avanzan, torres disparan y se mejoran.</div>
+						<div class="play-row"><div class="score">★ 1050</div><span class="btn-play disabled">Jugar</span></div>
+					</div>
+
+					<div class="game-card">
+						<div class="game-art" style="background: linear-gradient(135deg,#272242,#0f172a);">
+							<img src="../img/plataformas.png" alt="Plataformas">
+							</div>
+						<h4 class="game-title">Juego de plataformas</h4>
+						<div class="game-desc">Saltos, obstáculos y niveles. Física, gravity y hitboxes.</div>
+						<div class="play-row"><div class="score">★ 1105</div><span class="btn-play disabled">Jugar</span></div>
+					</div>
+
+					<div class="game-card">
+						<div class="game-art" style="background: linear-gradient(135deg,#3b1d5c,#7c3aed);">
+							<img src="../img/adivina%20coloreks.png" alt="Adivina colores">
+							</div>
+						<h4 class="game-title">Adivina colores online</h4>
+						<div class="game-desc">Tu estilo. Salas, turnos y chat para jugar con otros.</div>
+						<div class="play-row"><div class="score">★ 1300</div><span class="btn-play disabled">Jugar</span></div>
+					</div>
+
+					<div class="game-card">
+						<div class="game-art" style="background: linear-gradient(135deg,#0b264a,#1b4fd6);">
+							<img src="../img/trivia.png" alt="Trivia online">
+						</div>
+						<h4 class="game-title">Trivia online</h4>
+						<div class="game-desc">Varios jugadores responden y compiten por el ranking.</div>
+						<div class="play-row"><div class="score">★ 1240</div><span class="btn-play disabled">Jugar</span></div>
+					</div>
+
+					<div class="game-card">
+						<div class="game-art" style="background: linear-gradient(135deg,#351939,#7c3aed);">
+							<img src="../img/pictionary.png" alt="Pictionary / Dibujar y adivinar">
+						</div>
+						<h4 class="game-title">Pictionary / Dibujar y adivinar</h4>
+						<div class="game-desc">Canvas, chat y dinámicas de adivinar en tiempo real.</div>
+						<div class="play-row"><div class="score">★ 1320</div><span class="btn-play disabled">Jugar</span></div>
+					</div>
+
+					<div class="game-card">
+						<div class="game-art" style="background: linear-gradient(135deg,#4a230e,#f97316);">
+							<img src="../img/mecanico.png" alt="Simulador de mecánico de motos">
+						</div>
+						<h4 class="game-title">Simulador de mecánico de motos</h4>
+						<div class="game-desc">Armar y desarmar motor, diagnosticar fallas y comprar repuestos.</div>
+						<div class="play-row"><div class="score">★ 970</div><span class="btn-play disabled">Jugar</span></div>
+					</div>
+
+
+
+					<div class="game-card">
+						<div class="game-art" style="background: linear-gradient(135deg,#4a210b,#c2410c);">
+							<img src="../img/uber.png" alt="Uber Moto">
+						</div>
+						<h4 class="game-title">“Uber Moto”</h4>
+						<div class="game-desc">Llevar pasajeros, evitar tráfico y mejorar la moto.</div>
+						<div class="play-row"><div class="score">★ 1090</div><span class="btn-play disabled">Jugar</span></div>
+					</div>
 				</div>
 			</section>
 		</main>
 	</div>
-</body>
-</html>
-
-				<div class="card placeholder" aria-disabled="true">
-					<div class="tag">Próximamente</div>
-					<h2>9. Juego de plataformas</h2>
-					<span>Saltos y niveles</span>
-					<p>Practicás física, gravity y hitboxes. Multijugador con Firebase como meta.</p>
-				</div>
-
-				<div class="card placeholder" aria-disabled="true">
-					<div class="tag">Próximamente</div>
-					<h2>10. Adivina colores online</h2>
-					<span>Salas y turnos</span>
-					<p>Ya va con tu estilo. Practicás salas, turnos y chat.</p>
-				</div>
-
-				<div class="card placeholder" aria-disabled="true">
-					<div class="tag">Próximamente</div>
-					<h2>11. Trivia online</h2>
-					<span>Varios jugadores</span>
-					<p>Ranking en tiempo real. Practicás sockets y sincronización.</p>
-				</div>
-
-				<div class="card placeholder" aria-disabled="true">
-					<div class="tag">Próximamente</div>
-					<h2>12. Pictionary / Dibujar y adivinar</h2>
-					<span>Canvas y chat</span>
-					<p>Practicás canvas, chat y WebSockets/Firebase.</p>
-				</div>
-
-				<div class="card placeholder" aria-disabled="true">
-					<div class="tag">Próximamente</div>
-					<h2>13. Simulador de mecánico de motos</h2>
-					<span>Armar/desarmar motor</span>
-					<p>Diagnosticar fallas y comprar repuestos.</p>
-				</div>
-
-				<div class="card placeholder" aria-disabled="true">
-					<div class="tag">Próximamente</div>
-					<h2>14. Juego de supervivencia en Salta</h2>
-					<span>Buscar agua y recursos</span>
-					<p>Clima y recursos. Practicás lógica ambiental y gestión.</p>
-				</div>
-
-				<div class="card placeholder" aria-disabled="true">
-					<div class="tag">Próximamente</div>
-					<h2>15. "Uber Moto"</h2>
-					<span>Llevar pasajeros</span>
-					<p>Evitar tráfico y mejorar la moto. Practicás rutas y físicas simples.</p>
-				</div>
-
-			</div>
-
-			<div class="footer">
-				El portal está pensado para crecer por carpetas: cada juego tendrá su propio índice y su propio acceso.
-			</div>
-		</section>
-	</main>
 </body>
 </html>
