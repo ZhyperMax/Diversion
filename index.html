@@ -165,7 +165,7 @@
 
 		.badges {
 			display: flex;
-			gap: 0.7rem;
+			gap: 0.9rem;
 			width: 100%;
 			max-width: 300px;
 			justify-content: center;
@@ -180,7 +180,11 @@
 			font-size: 1.35rem;
 			color: #e6ecff;
 			background: transparent;
+			transition: transform 220ms cubic-bezier(.2,.9,.2,1), box-shadow 220ms ease, color 160ms ease;
+			will-change: transform, box-shadow;
 		}
+
+		/* hover/focus effects removed per user request */
 
 		.login-stack {
 			display: grid;
@@ -293,7 +297,7 @@
 				<div class="badges" aria-hidden="true">
 					<i class="fa-solid fa-gamepad badge-icon" aria-hidden="true"></i>
 					<i class="fa-solid fa-tv badge-icon" aria-hidden="true"></i>
-					<i class="fa-solid fa-joystick badge-icon" aria-hidden="true"></i>
+					<i class="fa-solid fa-puzzle-piece badge-icon" aria-hidden="true"></i>
 					<i class="fa-solid fa-headset badge-icon" aria-hidden="true"></i>
 				</div>
 
