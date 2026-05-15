@@ -1,0 +1,8 @@
+const firebaseConfig = {
+  apiKey: "AIzaSyB9iI-f-o1nXr15Kpcm9-vwnwoudFWhTXo",
+  authDomain: "juegos-salta.firebaseapp.com",
+  projectId: "juegos-salta",
+  storageBucket: "juegos-salta.firebasestorage.app",
+  messagingSenderId: "474098285146",
+  appId: "1:474098285146:web:2dcfc6d108ae00a0f6b663"
+};
