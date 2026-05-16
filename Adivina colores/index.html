@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Adivina el orden de colores — Juegos Salta</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
+<link rel="stylesheet" href="./portal.css">
+</head>
+<body class="portal-page">
+	<div class="portal-shell">
+		<aside class="portal-sidebar">
+			<div class="portal-brand">
+				<a class="portal-back" href="../juegos/index.html" aria-label="Volver al portal de juegos">
+					<i class="fa-solid fa-chevron-left"></i>
+				</a>
+				<div class="portal-brand-mark">?</div>
+				<div class="portal-brand-text">
+					<span class="brand-top">ADIVINA</span>
+					<span class="brand-bottom">ORDEN DE COLORES</span>
+				</div>
+			</div>
+
+			<nav class="portal-nav" aria-label="Navegación del juego">
+				<a class="active" href="#"><i class="fa-solid fa-house"></i> Inicio</a>
+				<a href="#modes"><i class="fa-solid fa-gamepad"></i> Adivina Colores</a>
+				<a href="#"><i class="fa-solid fa-trophy"></i> Ranking</a>
+				<a href="#"><i class="fa-solid fa-chart-simple"></i> Estadísticas</a>
+				<a href="#"><i class="fa-solid fa-comments"></i> Mis salas</a>
+				<a href="#"><i class="fa-solid fa-gift"></i> Recompensas</a>
+				<a href="#"><i class="fa-regular fa-circle-question"></i> Cómo jugar</a>
+			</nav>
+
+			<div class="portal-daily">
+				<h3><i class="fa-solid fa-bullseye"></i> Desafío diario</h3>
+				<p>Adiviná 3 secuencias de colores sin fallar.</p>
+				<div class="daily-meta">Recompensa: 100 <span>🪙</span></div>
+				<div class="daily-progress"><span style="width: 38%"></span></div>
+				<div class="daily-count">1 / 3</div>
+			</div>
+		</aside>
+
+		<main class="portal-main">
+			<header class="portal-topbar">
+				<div>
+					<h1 class="portal-title">ADIVINA <span>ORDEN DE COLORES</span></h1>
+					<p class="portal-subtitle">Elige un modo de juego y comienza a ordenar colores 🎯</p>
+				</div>
+
+				<div class="portal-profile">
+					<div class="profile-avatar">MR</div>
+					<div class="profile-copy">
+						<strong>MotoRider</strong>
+						<small>Nivel 24</small>
+						<div class="profile-bar"><span></span></div>
+						<small class="profile-xp">2.450 / 3.500 XP</small>
+					</div>
+					<i class="fa-solid fa-gear profile-gear"></i>
+				</div>
+			</header>
+
+			<section class="portal-grid">
+				<div class="portal-main-col">
+					<section class="hero-card">
+						<div class="hero-copy">
+							<h2>ADIVINA <span>ORDEN DE COLORES</span></h2>
+							<p>La meta es descubrir la secuencia secreta antes que se te acaben los intentos.</p>
+						</div>
+						<div class="hero-art">
+							<div class="hero-ghost left">◼</div>
+							<div class="hero-ghost right">◼</div>
+							<div class="hero-number">?</div>
+						</div>
+					</section>
+
+					<h3 class="section-title" id="modes">ELIGE TU MODO</h3>
+					<div class="modes-grid">
+						<a class="mode-card mode-single" href="./singleplayer.html">
+							<div class="mode-icon"><i class="fa-solid fa-user"></i></div>
+							<div class="mode-title">SINGLE PLAYER</div>
+							<p>Juega solo y desafía tu mejor marca.</p>
+							<span class="mode-btn">JUGAR SOLO</span>
+						</a>
+
+						<a class="mode-card mode-multi" href="#">
+							<div class="mode-icon"><i class="fa-solid fa-users"></i></div>
+							<div class="mode-title">MULTIPLAYER</div>
+							<p>Crea o únete a una sala y juega con otros.</p>
+							<span class="mode-btn">JUGAR ONLINE</span>
+						</a>
+					</div>
+				</div>
+
+				<aside class="portal-side">
+					<section class="side-card ranking-card">
+						<div class="card-head">
+							<h4><i class="fa-solid fa-crown"></i> RANKING GLOBAL</h4>
+							<a href="#">Ver completo →</a>
+						</div>
+						<div class="ranking-list">
+							<div class="ranking-item"><span class="medal gold">👑</span><div class="rank-avatar">V</div><div class="rank-name">Valen</div><strong>12.450 pts</strong></div>
+							<div class="ranking-item"><span class="medal silver">🥈</span><div class="rank-avatar">MR</div><div class="rank-name">MotoRider</div><strong>9.870 pts</strong></div>
+							<div class="ranking-item"><span class="medal bronze">🥉</span><div class="rank-avatar">C</div><div class="rank-name">Carlos</div><strong>7.650 pts</strong></div>
+							<div class="ranking-item"><span class="rank-index">4</span><div class="rank-avatar">S</div><div class="rank-name">Sofía</div><strong>6.300 pts</strong></div>
+							<div class="ranking-item"><span class="rank-index">5</span><div class="rank-avatar">L</div><div class="rank-name">Luis</div><strong>5.210 pts</strong></div>
+						</div>
+					</section>
+
+					<section class="side-card stats-card">
+						<h4><i class="fa-solid fa-chart-line"></i> TU MEJOR MARCA</h4>
+						<div class="stat-row"><span><i class="fa-solid fa-bullseye"></i> Mejor puntaje</span><strong>9.870</strong></div>
+						<div class="stat-row"><span><i class="fa-solid fa-trophy"></i> Partidas jugadas</span><strong>128</strong></div>
+						<div class="stat-row"><span><i class="fa-solid fa-bolt"></i> Mejor racha</span><strong>15 <small>victorias</small></strong></div>
+					</section>
+
+					<section class="side-card how-card">
+						<h4><i class="fa-solid fa-circle-info"></i> CÓMO SE JUEGA</h4>
+						<ul>
+							<li>La computadora elige una secuencia secreta de 5 colores.</li>
+							<li>Adviná el orden correcto en la menor cantidad de intentos.</li>
+							<li>Recibí pistas: acierto exacto y color correcto en otra posición.</li>
+						</ul>
+					</section>
+
+					<section class="side-card reward-card">
+						<div>
+							<h4><i class="fa-solid fa-gift"></i> RECOMPENSA SEMANAL</h4>
+							<p>Juega 5 partidas esta semana</p>
+							<div class="daily-progress reward-progress"><span></span></div>
+							<div class="reward-count">3 / 5</div>
+						</div>
+						<div class="gift-icon">🎁</div>
+					</section>
+				</aside>
+			</section>
+		</main>
+	</div>
+</body>
+</html>

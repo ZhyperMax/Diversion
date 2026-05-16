@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Adivina el orden de colores — Single Player</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body class="color-player-page">
+<main class="color-layout">
+<section class="color-frame">
+<header class="color-top">
+<a class="back-link" href="./index.html" aria-label="Volver al portal">
+<i class="fa-solid fa-chevron-left"></i>
+</a>
+
+<div class="color-brand">
+<div class="color-mark">?</div>
+<div class="color-title-stack" aria-label="Adivina el orden de colores">
+<span class="top">ADIVINA EL</span>
+<span class="bottom">ORDEN DE COLORES</span>
+</div>
+</div>
+
+<div class="single-badge"><i class="fa-solid fa-user"></i> SINGLE PLAYER</div>
+</header>
+
+<div class="frame-divider"></div>
+
+<section class="intro-block">
+<p>Estoy pensando en un orden secreto para estos colores:</p>
+<div class="color-labels">
+	<span class="label red">Rojo</span>
+	<span class="label blue">Azul</span>
+	<span class="label green">Verde</span>
+	<span class="label yellow">Amarillo</span>
+	<span class="label purple">Púrpura</span>
+</div>
+</section>
+
+<section class="guess-panel" aria-label="Intento actual">
+<div class="guess-label">TU INTENTO</div>
+<div class="sequence-row" id="sequenceSlots">
+	<button type="button" class="sequence-slot empty" data-index="0" aria-label="Color 1"></button>
+	<button type="button" class="sequence-slot empty" data-index="1" aria-label="Color 2"></button>
+	<button type="button" class="sequence-slot empty" data-index="2" aria-label="Color 3"></button>
+	<button type="button" class="sequence-slot empty" data-index="3" aria-label="Color 4"></button>
+	<button type="button" class="sequence-slot empty" data-index="4" aria-label="Color 5"></button>
+</div>
+<button id="btn-order" class="order-btn" type="button">ORDENAR COLORES</button>
+<button id="btn-try" class="primary-btn" type="button">COMPROBAR</button>
+<div class="secondary-row">
+	<button id="btn-reset" class="reset-link" type="button"><i class="fa-solid fa-rotate-right"></i> Reiniciar</button>
+</div>
+</section>
+
+<section class="palette-card">
+<div class="palette-head">
+	<span class="palette-title">TU PALETA</span>
+	<span class="palette-help">Tocá un color para agregarlo al orden</span>
+</div>
+<div class="palette-grid" id="paletteGrid">
+	<button class="palette-btn red" data-color="red" type="button"></button>
+	<button class="palette-btn blue" data-color="blue" type="button"></button>
+	<button class="palette-btn green" data-color="green" type="button"></button>
+	<button class="palette-btn yellow" data-color="yellow" type="button"></button>
+	<button class="palette-btn purple" data-color="purple" type="button"></button>
+</div>
+</section>
+
+<section class="feedback-card" aria-live="polite">
+<div id="feedback-icon" class="feedback-icon"><i class="fa-solid fa-arrow-up"></i></div>
+<div id="message" class="feedback-text">El orden correcto tiene <strong>5 colores</strong></div>
+</section>
+<div id="hint" class="small-line">Presta atención a las pistas de color para encontrar el orden más rápido.</div>
+
+<section class="stats-grid" aria-label="Estadísticas rápidas">
+<div class="stat-card intentos">
+<i class="fa-solid fa-bullseye"></i>
+<span class="label">Intentos</span>
+<strong id="attempts" class="value">0</strong>
+</div>
+<div class="stat-card record">
+<i class="fa-solid fa-trophy"></i>
+<span class="label">Récord</span>
+<strong class="value">12</strong>
+</div>
+<div class="stat-card puntaje">
+<i class="fa-solid fa-chart-column"></i>
+<span class="label">Puntaje</span>
+<strong class="value">250</strong>
+</div>
+</section>
+
+<section class="tip-card">
+<div class="tip-icon"><i class="fa-solid fa-lightbulb"></i></div>
+<div class="tip-text"><strong>Consejo:</strong> Ordená los colores con calma, y usá las pistas para corregir el intento.</div>
+</section>
+</section>
+</main>
+
+<script src="./script.js" defer></script>
+</body>
+</html>
