@@ -168,6 +168,20 @@ body.color-player-page {
 	outline: none;
 	border-color: rgba(124, 58, 237, 0.6);
 }
+
+/* Force darker dropdown and option styling where supported */
+.difficulty-select select,
+.difficulty-select select option {
+	background-color: rgba(3,7,18,0.9) !important;
+	color: var(--text) !important;
+}
+
+/* Hide native arrow on IE/Edge */
+.difficulty-select select::-ms-expand { display: none; }
+
+/* Ensure WebKit uses our text color */
+.difficulty-select select:-webkit-autofill,
+.difficulty-select select { -webkit-text-fill-color: var(--text) !important; }
 .intro-block p {
 	margin: 0;
 	font-size: clamp(1.05rem, 2vw, 1.45rem);

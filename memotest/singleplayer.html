@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Memotest — Single Player</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body class="color-player-page">
+<main class="memo-layout">
+	<section class="memo-frame">
+		<header class="memo-top">
+			<a class="back-link" href="./index.html" aria-label="Volver al portal"><i class="fa-solid fa-chevron-left"></i></a>
+			<div class="memo-brand">
+				<div class="memo-mark">M</div>
+				<div class="memo-title">MEMOTEST</div>
+			</div>
+			<div class="memo-controls">
+				<button id="btn-start" class="primary-btn">COMENZAR PARTIDA</button>
+			</div>
+		</header>
+
+		<div class="memo-board-wrap">
+			<div class="memo-board" id="memoBoard">
+				<!-- cartas generadas aquí (4x4) -->
+			</div>
+			<div class="memo-logo">
+				<img src="../img/memotest.png" alt="Memotest">
+			</div>
+		</div>
+
+		<div class="memo-controls-row">
+			<div class="stat-box">
+				<div class="stat-label">TEMPORIZADOR</div>
+				<div class="stat-value" id="timer">00:00</div>
+			</div>
+			<div class="stat-box">
+				<div class="stat-label">CONTADOR DE MOVIMIENTOS</div>
+				<div class="stat-value" id="moves">0</div>
+			</div>
+			<div class="stat-box">
+				<div class="stat-label">PARES ENCONTRADOS</div>
+				<div class="stat-value" id="found">0 / 8</div>
+			</div>
+		</div>
+
+		<div class="memo-footer-tip">
+			<i class="fa-solid fa-lightbulb"></i>
+			<div>Consejo: Memorizá la ubicación de las cartas que vas volteando para encontrar las parejas más rápido.</div>
+		</div>
+	</section>
+</main>
+
+<script src="./script.js" defer></script>
+</body>
+</html>
