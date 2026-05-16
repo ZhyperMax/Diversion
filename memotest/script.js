@@ -7,8 +7,14 @@
 
 	if (!board || !btnStart || !timerEl || !movesEl || !foundEl) return;
 
-	const icons = ['🍎','🚗','🐶','⭐','⚽','🎵','🌟','🍀']; // 8 icons -> 16 cards
+	// load images from img/ folder (use first 8 images and duplicate to make pairs)
+	const availableImages = [
+		'img/1.png','img/2.png','img/3.png','img/4.png','img/5.png','img/6.png','img/7.png','img/8.png','img/9.png','img/10.png','img/11.png','img/12.png','img/13.png','img/14.png','img/15.png','img/16.png'
+	];
+	const pairCount = Math.min(8, Math.floor(availableImages.length/2));
+	const images = availableImages.slice(0, pairCount);
 	let deck = [];
+	let started = false;
 	let first = null;
 	let second = null;
 	let lock = false;
@@ -18,7 +24,7 @@
 	let timerId = null;
 
 	function buildDeck(){
-		deck = icons.concat(icons).map((icon,idx)=>({id: idx, icon, matched:false}));
+		deck = images.concat(images).map((src,idx)=>({id: idx, src, matched:false, revealed:false}));
 		// shuffle
 		for(let i=deck.length-1;i>0;i--){
 			const j = Math.floor(Math.random()*(i+1));
@@ -32,8 +38,23 @@
 			const el = document.createElement('button');
 			el.className='memo-card';
 			el.dataset.index = idx;
-			el.innerHTML = '<span class="card-face">'+(card.matched||card.revealed?card.icon:'')+'</span>';
-			if(card.matched) el.classList.add('revealed');
+			const face = document.createElement('span');
+			face.className = 'card-face';
+			// always include the image element to reserve layout and avoid reflow when revealing
+			const img = document.createElement('img');
+			img.className = 'card-img';
+			img.src = card.src;
+			img.alt = 'carta';
+			if(card.matched || card.revealed){
+				img.style.visibility = 'visible';
+				img.style.opacity = '1';
+			} else {
+				img.style.visibility = 'hidden';
+				img.style.opacity = '0';
+			}
+			face.appendChild(img);
+			el.appendChild(face);
+			if(card.matched || card.revealed) el.classList.add('revealed');
 			el.addEventListener('click', onCardClick);
 			board.appendChild(el);
 		});
@@ -41,11 +62,12 @@
 	}
 
 	function onCardClick(e){
+		if(!started) return; // ignore clicks before game start
 		if(lock) return;
 		const idx = Number(e.currentTarget.dataset.index);
 		const card = deck[idx];
-		if(card.matched || card.revealed) return;
-		card.revealed = true;
+			if(card.matched || card.revealed) return;
+			card.revealed = true;
 		renderBoard();
 		if(!first) { first = {idx, card}; return; }
 		if(first && !second){ second = {idx, card}; lock=true; moves++; updateStats();
@@ -56,19 +78,19 @@
 	}
 
 	function checkMatch(){
-		if(first.card.icon === second.card.icon){
+		if(first.card.src === second.card.src){
 			deck[first.idx].matched = true; deck[second.idx].matched = true; found++; updateStats();
 		} else {
 			deck[first.idx].revealed = false; deck[second.idx].revealed = false;
 		}
 		first = null; second = null; lock=false;
 		renderBoard();
-		if(found===icons.length) finish();
+		if(found===images.length) finish();
 	}
 
 	function updateStats(){
 		movesEl.textContent = String(moves);
-		foundEl.textContent = found+' / '+icons.length;
+		foundEl.textContent = found+' / '+images.length;
 	}
 
 	function startTimer(){
@@ -78,11 +100,34 @@
 
 	function stopTimer(){ clearInterval(timerId); timerId=null; }
 
-	function startGame(){ buildDeck(); moves=0; found=0; first=second=null; lock=false; renderBoard(); startTimer(); }
+	function startGame(){
+		started = true;
+		// hide portal logo overlay
+		const logo = document.querySelector('.memo-logo');
+		if(logo) logo.classList.add('hidden');
+
+		buildDeck();
+		moves=0; found=0; first=second=null; lock=false;
+		renderBoard();
+		startTimer();
+	}
 
 	function finish(){ stopTimer(); setTimeout(()=>{ alert('¡Ganaste! Encontraste todas las parejas en '+moves+' movimientos.'); },200); }
 
 	btnStart.addEventListener('click', startGame);
-	// build initial board
-	buildDeck(); renderBoard();
+	// initial state: show placeholders and logo; do not build deck until start
+	function renderPlaceholders(){
+		board.innerHTML='';
+		for(let i=0;i<16;i++){
+			const el = document.createElement('button');
+			el.className='memo-card';
+			el.disabled = true;
+			const face = document.createElement('span');
+			face.className='card-face';
+			el.appendChild(face);
+			board.appendChild(el);
+		}
+	}
+
+	renderPlaceholders();
 })();
