@@ -48,11 +48,21 @@
 	<button type="button" class="sequence-slot empty" data-index="3" aria-label="Color 4"></button>
 	<button type="button" class="sequence-slot empty" data-index="4" aria-label="Color 5"></button>
 </div>
-<button id="btn-order" class="order-btn" type="button">ORDENAR COLORES</button>
+<button id="btn-order" class="order-btn" type="button">BORRAR INTENTO</button>
 <button id="btn-try" class="primary-btn" type="button">COMPROBAR</button>
 <div class="secondary-row">
 	<button id="btn-reset" class="reset-link" type="button"><i class="fa-solid fa-rotate-right"></i> Reiniciar</button>
 </div>
+</section>
+
+<section class="history-card" aria-label="Historial de intentos">
+	<div class="history-head">
+		<span class="history-title">HISTORIAL</span>
+		<span class="history-meta">Máximo 7 intentos</span>
+	</div>
+	<div id="historyList" class="history-list">
+		<p class="history-empty">Todavía no hiciste comprobaciones.</p>
+	</div>
 </section>
 
 <section class="palette-card">
@@ -80,6 +90,11 @@
 <i class="fa-solid fa-bullseye"></i>
 <span class="label">Intentos</span>
 <strong id="attempts" class="value">0</strong>
+</div>
+<div class="stat-card restantes">
+<i class="fa-solid fa-hourglass-half"></i>
+<span class="label">Restan</span>
+<strong id="remainingAttempts" class="value">7</strong>
 </div>
 <div class="stat-card record">
 <i class="fa-solid fa-trophy"></i>
