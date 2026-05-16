@@ -1,690 +1,29 @@
 <!doctype html>
 <html lang="es">
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width,initial-scale=1">
-	<title>Adivina el número — Juegos Salta</title>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
-	<style>
-		:root{
-			--bg: linear-gradient(180deg, #020411 0%, #071126 100%);
-			--panel: rgba(7, 12, 29, 0.84);
-			--panel-soft: rgba(255, 255, 255, 0.03);
-			--line: rgba(120, 140, 190, 0.16);
-			--text: #eef3ff;
-			--muted: #9aa8c7;
-			--green: #61f63a;
-			--blue: #2fb6ff;
-			--purple: #7c3aed;
-			--gold: #ffb84a;
-		}
-
-		* {
-			box-sizing: border-box;
-		}
-
-		body {
-			margin: 0;
-			min-height: 100vh;
-			font-family: Segoe UI, system-ui, Arial, sans-serif;
-			background:
-				radial-gradient(circle at 18% 18%, rgba(124, 58, 237, 0.22), transparent 22%),
-				radial-gradient(circle at 78% 14%, rgba(97, 246, 58, 0.16), transparent 18%),
-				var(--bg);
-			color: var(--text);
-		}
-
-		.shell {
-			display: grid;
-			grid-template-columns: 240px minmax(0, 1fr) 300px;
-			min-height: 100vh;
-		}
-
-		.sidebar {
-			padding: 18px 14px 16px;
-			border-right: 1px solid rgba(255, 255, 255, 0.04);
-			background: rgba(3, 7, 18, 0.65);
-			backdrop-filter: blur(14px);
-			display: flex;
-			flex-direction: column;
-			gap: 18px;
-		}
-
-		.brand {
-			display: flex;
-			align-items: center;
-			gap: 12px;
-		}
-
-		.brand-mark {
-			width: 52px;
-			height: 52px;
-			border-radius: 18px;
-			background: conic-gradient(from 200deg, #7c3aed, #61f63a, #2fb6ff, #7c3aed);
-			box-shadow: 0 0 30px rgba(124, 58, 237, 0.25);
-			display: grid;
-			place-items: center;
-			font-weight: 900;
-			color: #08101f;
-		}
-
-		.brand-name {
-			font-size: 0.78rem;
-			line-height: 0.95;
-			font-weight: 900;
-			letter-spacing: 0.06em;
-		}
-
-		.nav {
-			display: grid;
-			gap: 10px;
-			padding-top: 12px;
-		}
-
-		.nav a {
-			text-decoration: none;
-			color: var(--muted);
-			padding: 14px 14px;
-			border-radius: 14px;
-			border: 1px solid transparent;
-			background: transparent;
-			font-size: 0.95rem;
-			display: flex;
-			align-items: center;
-			gap: 12px;
-		}
-
-		.nav a i {
-			width: 18px;
-			text-align: center;
-		}
-
-		.nav a.active {
-			color: var(--text);
-			background: linear-gradient(90deg, rgba(97, 246, 58, 0.08), rgba(47, 182, 255, 0.05));
-			border-color: rgba(97, 246, 58, 0.18);
-		}
-
-		.left-card {
-			margin-top: auto;
-			padding: 14px;
-			border: 1px solid var(--line);
-			border-radius: 18px;
-			background: linear-gradient(180deg, rgba(255,255,255,0.03), transparent);
-		}
-
-		.left-card h3,
-		.left-card p {
-			margin: 0;
-		}
-
-		.left-card p {
-			margin-top: 8px;
-			color: var(--muted);
-			font-size: 0.92rem;
-		}
-
-		.main {
-			padding: 18px 20px 20px;
-		}
-
-		.topbar {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			gap: 18px;
-			margin-bottom: 14px;
-		}
-
-		.hero-title {
-			margin: 0;
-			font-size: clamp(1.75rem, 2.9vw, 2.9rem);
-			line-height: 0.95;
-			text-transform: uppercase;
-			letter-spacing: -0.04em;
-		}
-
-		.hero-title .accent {
-			color: var(--green);
-		}
-
-		.hero-subtitle {
-			margin: 10px 0 0;
-			color: var(--muted);
-			font-size: 0.98rem;
-		}
-
-		.hero-badge {
-			display: inline-flex;
-			align-items: center;
-			gap: 8px;
-			padding: 10px 14px;
-			border-radius: 14px;
-			background: rgba(255,255,255,0.03);
-			border: 1px solid var(--line);
-			color: var(--muted);
-			font-size: 0.9rem;
-		}
-
-		.profile {
-			min-width: 250px;
-			padding: 14px 16px;
-			border-radius: 18px;
-			background: rgba(11, 16, 38, 0.92);
-			border: 1px solid var(--line);
-			display: flex;
-			align-items: center;
-			gap: 12px;
-			box-shadow: 0 16px 40px rgba(0, 0, 0, 0.24);
-		}
-
-		.avatar {
-			width: 52px;
-			height: 52px;
-			border-radius: 18px;
-			background: linear-gradient(135deg, #61f63a, #2fb6ff);
-			display: grid;
-			place-items: center;
-			color: #06111f;
-			font-weight: 900;
-		}
-
-		.profile strong,
-		.profile small {
-			display: block;
-		}
-
-		.profile small {
-			color: var(--muted);
-		}
-
-		.progress {
-			margin-top: 8px;
-			height: 6px;
-			background: rgba(255, 255, 255, 0.08);
-			border-radius: 999px;
-			overflow: hidden;
-		}
-
-		.progress span {
-			display: block;
-			height: 100%;
-			width: 68%;
-			background: linear-gradient(90deg, var(--green), #2fb6ff);
-		}
-
-		.workspace {
-			display: grid;
-			grid-template-columns: minmax(0, 1fr) 330px;
-			gap: 16px;
-		}
-
-		.center,
-		.right {
-			display: grid;
-			gap: 16px;
-		}
-
-		.panel {
-			background: var(--panel);
-			border: 1px solid rgba(255, 255, 255, 0.06);
-			border-radius: 20px;
-			box-shadow: 0 14px 48px rgba(0, 0, 0, 0.28);
-			backdrop-filter: blur(14px);
-		}
-
-		.game-hero {
-			padding: 24px 22px;
-			position: relative;
-			overflow: hidden;
-		}
-
-		.game-hero::after {
-			content: "?";
-			position: absolute;
-			right: 26px;
-			top: 12px;
-			font-size: clamp(3rem, 8vw, 7rem);
-			font-weight: 900;
-			line-height: 1;
-			color: rgba(124, 58, 237, 0.78);
-			text-shadow: 0 0 26px rgba(124, 58, 237, 0.4);
-		}
-
-		.game-hero::before {
-			content: "42 88 3 17";
-			position: absolute;
-			right: 95px;
-			top: 18px;
-			font-size: 0.82rem;
-			letter-spacing: 0.2em;
-			color: rgba(124, 58, 237, 0.6);
-		}
-
-		.game-hero h2 {
-			margin: 0;
-			font-size: clamp(1.6rem, 2.4vw, 2.8rem);
-			text-transform: uppercase;
-			line-height: 0.98;
-		}
-
-		.game-hero h2 .accent {
-			color: var(--green);
-		}
-
-		.game-hero p {
-			margin: 10px 0 0;
-			color: var(--muted);
-		}
-
-		.section-label {
-			margin: 0 0 10px;
-			font-size: 0.84rem;
-			font-weight: 800;
-			letter-spacing: 0.09em;
-			color: #d8def0;
-			text-transform: uppercase;
-		}
-
-		.mode-grid {
-			display: grid;
-			grid-template-columns: repeat(2, minmax(0, 1fr));
-			gap: 14px;
-		}
-
-		.mode-card {
-			padding: 20px 18px 18px;
-			border-radius: 20px;
-			border: 1px solid rgba(255,255,255,0.08);
-			min-height: 248px;
-			display: grid;
-			justify-items: center;
-			align-content: start;
-			text-align: center;
-			position: relative;
-			overflow: hidden;
-		}
-
-		.mode-card::before {
-			content: "";
-			position: absolute;
-			inset: 0;
-			background: radial-gradient(circle at top, rgba(255,255,255,0.08), transparent 45%);
-			pointer-events: none;
-		}
-
-		.mode-card .icon {
-			width: 84px;
-			height: 84px;
-			border-radius: 50%;
-			display: grid;
-			place-items: center;
-			font-size: 2.3rem;
-			margin-bottom: 14px;
-			border: 1px solid rgba(255,255,255,0.12);
-			position: relative;
-			z-index: 1;
-		}
-
-		.mode-card h3,
-		.mode-card p {
-			margin: 0;
-			position: relative;
-			z-index: 1;
-		}
-
-		.mode-card h3 {
-			font-size: 1.2rem;
-			text-transform: uppercase;
-			margin-bottom: 8px;
-		}
-
-		.mode-card p {
-			color: var(--muted);
-			font-size: 0.95rem;
-			line-height: 1.5;
-			max-width: 24ch;
-		}
-
-		.mode-card .action {
-			margin-top: 18px;
-			padding: 12px 18px;
-			border-radius: 12px;
-			font-weight: 800;
-			text-transform: uppercase;
-			letter-spacing: 0.04em;
-			border: 0;
-			cursor: pointer;
-			position: relative;
-			z-index: 1;
-			text-decoration: none;
-			display: inline-flex;
-			align-items: center;
-			gap: 8px;
-		}
-
-		.mode-card.green {
-			background: linear-gradient(180deg, rgba(25, 78, 30, 0.46), rgba(6, 36, 17, 0.86));
-			border-color: rgba(97, 246, 58, 0.34);
-			box-shadow: inset 0 0 0 1px rgba(97, 246, 58, 0.08), 0 0 30px rgba(97, 246, 58, 0.08);
-		}
-
-		.mode-card.green .icon {
-			color: var(--green);
-			background: rgba(97, 246, 58, 0.08);
-			box-shadow: 0 0 24px rgba(97, 246, 58, 0.22);
-		}
-
-		.mode-card.green h3 {
-			color: var(--green);
-		}
-
-		.mode-card.green .action {
-			background: linear-gradient(180deg, #2c9f35, #1f7e2a);
-			color: #f3ffee;
-		}
-
-		.mode-card.blue {
-			background: linear-gradient(180deg, rgba(18, 48, 114, 0.52), rgba(8, 26, 66, 0.9));
-			border-color: rgba(47, 182, 255, 0.34);
-			box-shadow: inset 0 0 0 1px rgba(47, 182, 255, 0.08), 0 0 30px rgba(47, 182, 255, 0.08);
-		}
-
-		.mode-card.blue .icon {
-			color: var(--blue);
-			background: rgba(47, 182, 255, 0.08);
-			box-shadow: 0 0 24px rgba(47, 182, 255, 0.22);
-		}
-
-		.mode-card.blue h3 {
-			color: var(--blue);
-		}
-
-		.mode-card.blue .action {
-			background: linear-gradient(180deg, #275fc9, #1d458f);
-			color: #f4f8ff;
-		}
-
-		.game-control {
-			padding: 20px 20px 22px;
-		}
-
-		.game-control .control-row {
-			display: flex;
-			flex-wrap: wrap;
-			gap: 10px;
-			margin-top: 16px;
-		}
-
-		label {
-			display: block;
-			font-weight: 700;
-			color: #dbe3f8;
-			margin-bottom: 10px;
-		}
-
-		input[type="number"] {
-			flex: 1 1 160px;
-			min-width: 140px;
-			padding: 14px 14px;
-			border-radius: 14px;
-			border: 1px solid rgba(255, 255, 255, 0.09);
-			background: rgba(255, 255, 255, 0.04);
-			color: var(--text);
-			font-size: 1rem;
-			outline: none;
-		}
-
-		input[type="number"]::placeholder {
-			color: #7080a3;
-		}
-
-		button {
-			border: 0;
-			border-radius: 14px;
-			padding: 14px 18px;
-			font-weight: 800;
-			cursor: pointer;
-		}
-
-		#btn-try {
-			background: linear-gradient(180deg, #ffffff, #e8edf8);
-			color: #0a1120;
-		}
-
-		#btn-reset {
-			background: transparent;
-			color: var(--text);
-			border: 1px solid rgba(255,255,255,0.1) !important;
-		}
-
-		.status-grid {
-			display: grid;
-			grid-template-columns: repeat(3, minmax(0, 1fr));
-			gap: 12px;
-			margin-top: 18px;
-		}
-
-		.mini-stat {
-			padding: 14px;
-			border-radius: 16px;
-			background: rgba(255,255,255,0.03);
-			border: 1px solid rgba(255,255,255,0.06);
-		}
-
-		.mini-stat span {
-			display: block;
-			color: var(--muted);
-			font-size: 0.88rem;
-			margin-bottom: 6px;
-		}
-
-		.mini-stat strong {
-			font-size: 1.2rem;
-		}
-
-		.msg {
-			min-height: 24px;
-			margin-top: 14px;
-			font-weight: 800;
-		}
-
-		.hint {
-			min-height: 20px;
-			color: #8fd6ff;
-			margin-top: 8px;
-		}
-
-		.history-panel {
-			margin-top: 14px;
-			padding: 18px 20px 20px;
-		}
-
-		.history-head {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			gap: 10px;
-			margin-bottom: 12px;
-		}
-
-		.history-list {
-			display: grid;
-			gap: 8px;
-			color: #d8e0f5;
-		}
-
-		.history-item {
-			padding: 10px 12px;
-			border-radius: 12px;
-			background: rgba(255,255,255,0.03);
-			border: 1px solid rgba(255,255,255,0.05);
-		}
-
-		.side {
-			display: grid;
-			gap: 16px;
-		}
-
-		.side .panel {
-			padding: 16px 18px;
-		}
-
-		.panel-title i,
-		.section-label i {
-			margin-right: 8px;
-		}
-
-		.panel-title {
-			margin: 0 0 10px;
-			text-transform: uppercase;
-			letter-spacing: 0.04em;
-			font-size: 0.86rem;
-		}
-
-		.rank-list {
-			display: grid;
-			gap: 10px;
-		}
-
-		.rank-item {
-			display: grid;
-			grid-template-columns: 26px 36px 1fr auto;
-			align-items: center;
-			gap: 10px;
-			padding: 10px 0;
-			border-top: 1px solid rgba(255,255,255,0.06);
-		}
-
-		.rank-item:first-child {
-			border-top: 0;
-			padding-top: 0;
-		}
-
-		.rank-avatar {
-			width: 36px;
-			height: 36px;
-			border-radius: 50%;
-			background: linear-gradient(135deg, #7c3aed, #2fb6ff);
-			display: grid;
-			place-items: center;
-			font-size: 0.75rem;
-			font-weight: 900;
-		}
-
-		.rank-item small,
-		.note-list li {
-			color: var(--muted);
-		}
-
-		.metric {
-			display: grid;
-			grid-template-columns: 1fr auto;
-			gap: 10px;
-			align-items: baseline;
-			padding: 12px 0;
-			border-top: 1px solid rgba(255,255,255,0.06);
-		}
-
-		.metric:first-of-type {
-			border-top: 0;
-			padding-top: 0;
-		}
-
-		.metric strong {
-			font-size: 1.3rem;
-		}
-
-		.note-list {
-			margin: 0;
-			padding-left: 18px;
-			display: grid;
-			gap: 10px;
-		}
-
-		.reward {
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			gap: 12px;
-			background: linear-gradient(135deg, rgba(97,246,58,0.08), rgba(47,182,255,0.04));
-			border: 1px solid rgba(97,246,58,0.28);
-		}
-
-		.reward .gift {
-			font-size: 2rem;
-		}
-
-		.link-btn {
-			text-decoration: none;
-			color: #eaf2ff;
-			font-weight: 800;
-			white-space: nowrap;
-		}
-
-		@media (max-width: 1180px) {
-			.shell {
-				grid-template-columns: 220px minmax(0, 1fr);
-			}
-
-			.right {
-				grid-column: 2;
-			}
-		}
-
-		@media (max-width: 900px) {
-			.shell {
-				grid-template-columns: 1fr;
-			}
-
-			.sidebar {
-				display: none;
-			}
-
-			.workspace {
-				grid-template-columns: 1fr;
-			}
-
-			.mode-grid,
-			.status-grid {
-				grid-template-columns: 1fr;
-			}
-		}
-
-		@media (max-width: 640px) {
-			.main {
-				padding: 14px;
-			}
-
-			.topbar {
-				flex-direction: column;
-				align-items: flex-start;
-			}
-
-			.profile {
-				width: 100%;
-			}
-
-			.game-hero,
-			.game-control,
-			.history-panel,
-			.side .panel {
-				padding: 16px;
-			}
-		}
-	</style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Adivina el número — Juegos Salta</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
+<link rel="stylesheet" href="./portal.css">
 </head>
-<body>
-	<div class="shell">
-		<aside class="sidebar">
-			<div class="brand">
-				<div class="brand-mark">?</div>
-				<div class="brand-name">ADIVINA<br>EL NÚMERO</div>
+<body class="portal-page">
+	<div class="portal-shell">
+		<aside class="portal-sidebar">
+			<div class="portal-brand">
+				<a class="portal-back" href="../juegos/index.html" aria-label="Volver al portal de juegos">
+					<i class="fa-solid fa-chevron-left"></i>
+				</a>
+				<div class="portal-brand-mark">?</div>
+				<div class="portal-brand-text">
+					<span class="brand-top">ADIVINA</span>
+					<span class="brand-bottom">EL NÚMERO</span>
+				</div>
 			</div>
 
-			<nav class="nav" aria-label="Navegación del juego">
-				<a href="#" class="active"><i class="fa-solid fa-house"></i> Inicio</a>
-				<a href="#"><i class="fa-regular fa-circle-question"></i> Adivina el Número</a>
+			<nav class="portal-nav" aria-label="Navegación del juego">
+				<a class="active" href="#"><i class="fa-solid fa-house"></i> Inicio</a>
+				<a href="#modes"><i class="fa-solid fa-gamepad"></i> Adivina el Número</a>
 				<a href="#"><i class="fa-solid fa-trophy"></i> Ranking</a>
 				<a href="#"><i class="fa-solid fa-chart-simple"></i> Estadísticas</a>
 				<a href="#"><i class="fa-solid fa-comments"></i> Mis salas</a>
@@ -692,148 +31,109 @@
 				<a href="#"><i class="fa-regular fa-circle-question"></i> Cómo jugar</a>
 			</nav>
 
-			<div class="left-card">
+			<div class="portal-daily">
 				<h3><i class="fa-solid fa-bullseye"></i> Desafío diario</h3>
 				<p>Adiviná en 8 intentos y mejorá tu marca.</p>
+				<div class="daily-meta">Recompensa: 100 <span>🪙</span></div>
+				<div class="daily-progress"><span></span></div>
+				<div class="daily-count">2 / 8</div>
 			</div>
 		</aside>
 
-		<main class="main">
-			<div class="topbar">
+		<main class="portal-main">
+			<header class="portal-topbar">
 				<div>
-					<div class="hero-badge"><i class="fa-solid fa-arrow-left"></i> Volver al portal</div>
-					<h1 class="hero-title">Adivina <span class="accent">el número</span></h1>
-					<p class="hero-subtitle">Elegí un modo de juego y comienza a adivinar. Esta versión es solo estética por ahora.</p>
+					<h1 class="portal-title">ADIVINA <span>EL NÚMERO</span></h1>
+					<p class="portal-subtitle">Elige un modo de juego y comienza a adivinar 🎯</p>
 				</div>
 
-				<div class="profile">
-					<div class="avatar">MR</div>
-					<div style="flex:1">
+				<div class="portal-profile">
+					<div class="profile-avatar">MR</div>
+					<div class="profile-copy">
 						<strong>MotoRider</strong>
 						<small>Nivel 24</small>
-						<div class="progress"><span></span></div>
-						<small style="margin-top:8px">2.450 / 3.500 XP</small>
+						<div class="profile-bar"><span></span></div>
+						<small class="profile-xp">2.450 / 3.500 XP</small>
 					</div>
-					<div style="align-self:flex-start;color:#9aa8c7"><i class="fa-solid fa-gear"></i></div>
+					<i class="fa-solid fa-gear profile-gear"></i>
 				</div>
-			</div>
+			</header>
 
-			<div class="workspace">
-				<section class="center">
-					<div class="panel game-hero" aria-labelledby="game-title">
-						<h2 id="game-title">Adivina <span class="accent">el número</span></h2>
-						<p>La PC genera un número aleatorio. Intentá adivinarlo y recibí pistas de si vas más alto o más bajo.</p>
-					</div>
+			<section class="portal-grid">
+				<div class="portal-main-col">
+					<section class="hero-card">
+						<div class="hero-copy">
+							<h2>ADIVINA <span>EL NÚMERO</span></h2>
+							<p>El objetivo es simple: encontrá el número correcto antes que se te acaben los intentos.</p>
+						</div>
+						<div class="hero-art">
+							<div class="hero-ghost left">?</div>
+							<div class="hero-ghost right">?</div>
+							<div class="hero-number">?</div>
+						</div>
+					</section>
 
-					<div class="section-label"><i class="fa-solid fa-gamepad"></i> Elegí tu modo</div>
-					<div class="mode-grid" aria-label="Modos de juego">
-						<div class="panel mode-card green">
-							<div class="icon"><i class="fa-solid fa-user"></i></div>
-							<h3>Single Player</h3>
+					<h3 class="section-title" id="modes">ELIGE TU MODO</h3>
+					<div class="modes-grid">
+						<a class="mode-card mode-single" href="./singleplayer.html">
+							<div class="mode-icon"><i class="fa-solid fa-user"></i></div>
+							<div class="mode-title">SINGLE PLAYER</div>
 							<p>Juega solo y desafía tu mejor marca.</p>
-							<div class="action"><i class="fa-solid fa-user"></i> Jugar solo</div>
-						</div>
+							<span class="mode-btn">JUGAR SOLO</span>
+						</a>
 
-						<div class="panel mode-card blue">
-							<div class="icon"><i class="fa-solid fa-users"></i></div>
-							<h3>Multiplayer</h3>
+						<a class="mode-card mode-multi" href="#">
+							<div class="mode-icon"><i class="fa-solid fa-users"></i></div>
+							<div class="mode-title">MULTIPLAYER</div>
 							<p>Crea o únete a una sala y juega con otros.</p>
-							<div class="action"><i class="fa-solid fa-globe"></i> Jugar online</div>
-						</div>
+							<span class="mode-btn">JUGAR ONLINE</span>
+						</a>
 					</div>
+				</div>
 
-					<div class="panel history-panel">
-						<div class="history-head">
-							<div class="section-label" style="margin:0"><i class="fa-regular fa-clipboard"></i> Historial</div>
-							<div style="color:var(--muted);font-size:0.9rem">Tus intentos recientes</div>
+				<aside class="portal-side">
+					<section class="side-card ranking-card">
+						<div class="card-head">
+							<h4><i class="fa-solid fa-crown"></i> RANKING GLOBAL</h4>
+							<a href="#">Ver completo →</a>
 						</div>
-						<div id="history" class="history-list"></div>
-					</div>
-				</section>
-
-				<aside class="right">
-					<div class="panel" style="padding:18px">
-						<div class="history-head">
-							<div class="panel-title"><i class="fa-solid fa-crown"></i> Ranking global</div>
-							<a class="link-btn" href="#">Ver completo →</a>
+						<div class="ranking-list">
+							<div class="ranking-item"><span class="medal gold">👑</span><div class="rank-avatar">V</div><div class="rank-name">Valen</div><strong>12.450 pts</strong></div>
+							<div class="ranking-item"><span class="medal silver">🥈</span><div class="rank-avatar">MR</div><div class="rank-name">MotoRider</div><strong>9.870 pts</strong></div>
+							<div class="ranking-item"><span class="medal bronze">🥉</span><div class="rank-avatar">C</div><div class="rank-name">Carlos</div><strong>7.650 pts</strong></div>
+							<div class="ranking-item"><span class="rank-index">4</span><div class="rank-avatar">S</div><div class="rank-name">Sofía</div><strong>6.300 pts</strong></div>
+							<div class="ranking-item"><span class="rank-index">5</span><div class="rank-avatar">L</div><div class="rank-name">Luis</div><strong>5.210 pts</strong></div>
 						</div>
-						<div class="rank-list">
-							<div class="rank-item"><div>👑</div><div class="rank-avatar">V</div><div>Valen<br><small>12.450 pts</small></div><strong>1</strong></div>
-							<div class="rank-item"><div>🥈</div><div class="rank-avatar">MR</div><div>MotoRider<br><small>9.870 pts</small></div><strong>2</strong></div>
-							<div class="rank-item"><div>🥉</div><div class="rank-avatar">C</div><div>Carlos<br><small>7.650 pts</small></div><strong>3</strong></div>
-						</div>
-					</div>
+					</section>
 
-					<div class="panel" style="padding:18px">
-						<div class="panel-title"><i class="fa-solid fa-chart-line"></i> Tu mejor marca</div>
-						<div class="metric"><span>Mejor puntaje</span><strong>9.870</strong></div>
-						<div class="metric"><span>Partidas jugadas</span><strong>128</strong></div>
-						<div class="metric"><span>Mejor racha</span><strong>15</strong></div>
-					</div>
+					<section class="side-card stats-card">
+						<h4><i class="fa-solid fa-chart-line"></i> TU MEJOR MARCA</h4>
+						<div class="stat-row"><span><i class="fa-solid fa-bullseye"></i> Mejor puntaje</span><strong>9.870</strong></div>
+						<div class="stat-row"><span><i class="fa-solid fa-trophy"></i> Partidas jugadas</span><strong>128</strong></div>
+						<div class="stat-row"><span><i class="fa-solid fa-bolt"></i> Mejor racha</span><strong>15 <small>victorias</small></strong></div>
+					</section>
 
-					<div class="panel" style="padding:18px">
-						<div class="panel-title"><i class="fa-solid fa-circle-info"></i> Cómo se juega</div>
-						<ul class="note-list">
+					<section class="side-card how-card">
+						<h4><i class="fa-solid fa-circle-info"></i> CÓMO SE JUEGA</h4>
+						<ul>
 							<li>La computadora elige un número entre 1 y 100.</li>
-							<li>Probá números y seguí las pistas.</li>
-							<li>Ganás cuando encuentres el valor correcto.</li>
+							<li>Adviná el número en la menor cantidad de intentos.</li>
+							<li>Recibí pistas: más alto o más bajo.</li>
 						</ul>
-					</div>
+					</section>
 
-					<div class="panel reward" style="padding:18px">
+					<section class="side-card reward-card">
 						<div>
-							<div class="panel-title" style="margin-bottom:6px"><i class="fa-solid fa-gift"></i> Recompensa semanal</div>
-							<div style="color:var(--muted)">Jugá 5 partidas esta semana</div>
-							<div class="progress" style="margin-top:12px;width:100%"><span style="width:60%"></span></div>
-							<div style="margin-top:8px;color:var(--muted);font-size:0.92rem">3 / 5</div>
+							<h4><i class="fa-solid fa-gift"></i> RECOMPENSA SEMANAL</h4>
+							<p>Juega 5 partidas esta semana</p>
+							<div class="daily-progress reward-progress"><span></span></div>
+							<div class="reward-count">3 / 5</div>
 						</div>
-						<div class="gift">🎁</div>
-					</div>
+						<div class="gift-icon">🎁</div>
+					</section>
 				</aside>
-			</div>
+			</section>
 		</main>
 	</div>
-
-	<script>
-		(function(){
-			const max = 100;
-			let secret = Math.floor(Math.random()*max)+1;
-			let attempts = 0;
-			const guessInput = document.getElementById('guess');
-			const btnTry = document.getElementById('btn-try');
-			const btnReset = document.getElementById('btn-reset');
-			const msg = document.getElementById('message');
-			const hint = document.getElementById('hint');
-			const attemptsEl = document.getElementById('attempts');
-			const historyEl = document.getElementById('history');
-
-			if (!guessInput || !btnTry || !btnReset || !msg || !hint || !attemptsEl || !historyEl) {
-				return;
-			}
-
-			function setMessage(text, ok){ msg.textContent = text; msg.style.color = ok? '#8ef' : '#ffb4b4'; }
-
-			function addHistory(v){ const el = document.createElement('div'); el.textContent = v; historyEl.prepend(el); }
-
-			function doTry(){
-				const val = Number(guessInput.value);
-				if(!val || val<1 || val>max){ setMessage('Ingresá un número entre 1 y '+max,false); return; }
-				attempts++;
-				attemptsEl.textContent = attempts;
-				addHistory('Intento '+attempts+': '+val);
-				if(val === secret){ setMessage('¡Correcto! Encontraste el número '+secret, true); hint.textContent = '';
-					btnTry.disabled = true; guessInput.disabled = true;
-					return;
-				}
-				if(val < secret){ hint.textContent = 'Más alto'; setMessage('No es correcto.', false); }
-				else { hint.textContent = 'Más bajo'; setMessage('No es correcto.', false); }
-			}
-
-			btnTry.addEventListener('click', doTry);
-			guessInput.addEventListener('keydown', function(e){ if(e.key === 'Enter') doTry(); });
-
-			btnReset.addEventListener('click', function(){ secret = Math.floor(Math.random()*max)+1; attempts = 0; attemptsEl.textContent = '0'; historyEl.innerHTML = ''; msg.textContent = ''; hint.textContent = ''; guessInput.value=''; guessInput.disabled = false; btnTry.disabled = false; });
-		})();
-	</script>
 </body>
 </html>

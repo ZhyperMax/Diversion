@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Adivina el número — Single Player</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body class="single-player-page">
+<main class="single-player-layout">
+<section class="game-frame">
+<header class="frame-top">
+<a class="back-link" href="./index.html" aria-label="Volver al portal">
+<i class="fa-solid fa-chevron-left"></i>
+</a>
+
+<div class="game-brand">
+<div class="game-mark">?</div>
+<div class="game-title-stack" aria-label="Adivina el número">
+<span class="top">ADIVINA</span>
+<span class="bottom">EL NÚMERO</span>
+</div>
+</div>
+
+<div class="single-badge"><i class="fa-solid fa-user"></i> SINGLE PLAYER</div>
+</header>
+
+<div class="frame-divider"></div>
+
+<section class="stage">
+<p>Estoy pensando en<br>un número entre</p>
+<div class="range">1 y 100</div>
+</section>
+
+<section class="guess-panel" aria-label="Intento actual">
+<div class="guess-label">TU INTENTO</div>
+<div class="guess-row">
+<button id="btn-minus" class="step-btn" type="button" aria-label="Bajar intento">−</button>
+<input id="guess" class="guess-value" type="number" min="1" max="100" value="42" aria-label="Tu intento">
+<button id="btn-plus" class="step-btn" type="button" aria-label="Subir intento">+</button>
+</div>
+<button id="btn-try" class="primary-btn" type="button">COMPROBAR</button>
+<div class="secondary-row">
+<button id="btn-reset" class="reset-link" type="button"><i class="fa-solid fa-rotate-right"></i> Reiniciar</button>
+</div>
+</section>
+
+<section class="feedback-card" aria-live="polite">
+<div id="feedback-icon" class="feedback-icon"><i class="fa-solid fa-arrow-up"></i></div>
+<div id="message" class="feedback-text">El número es <strong>MÁS ALTO</strong></div>
+</section>
+<div id="hint" class="small-line">Presta atención a las pistas para encontrar el número más rápido.</div>
+
+<section class="stats-grid" aria-label="Estadísticas rápidas">
+<div class="stat-card intentos">
+<i class="fa-solid fa-bullseye"></i>
+<span class="label">Intentos</span>
+<strong id="attempts" class="value">0</strong>
+</div>
+<div class="stat-card record">
+<i class="fa-solid fa-trophy"></i>
+<span class="label">Récord</span>
+<strong class="value">12</strong>
+</div>
+<div class="stat-card puntaje">
+<i class="fa-solid fa-chart-column"></i>
+<span class="label">Puntaje</span>
+<strong class="value">250</strong>
+</div>
+</section>
+
+<section class="tip-card">
+<div class="tip-icon"><i class="fa-solid fa-lightbulb"></i></div>
+<div class="tip-text"><strong>Consejo:</strong> Presta atención a las pistas para encontrar el número más rápido.</div>
+</section>
+</section>
+</main>
+
+<script src="./script.js" defer></script>
+</body>
+</html>
