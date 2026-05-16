@@ -23,7 +23,16 @@
 </div>
 </div>
 
-<div class="single-badge"><i class="fa-solid fa-user"></i> SINGLE PLAYER</div>
+	<div class="single-badge"><i class="fa-solid fa-user"></i> SINGLE PLAYER</div>
+
+	<div class="difficulty-select">
+		<label for="difficultySelect">Dificultad</label>
+		<select id="difficultySelect" aria-label="Seleccionar dificultad">
+			<option value="easy">Fácil</option>
+			<option value="medium">Medio</option>
+			<option value="hard">Difícil</option>
+		</select>
+	</div>
 </header>
 
 <div class="frame-divider"></div>
@@ -42,11 +51,7 @@
 <section class="guess-panel" aria-label="Intento actual">
 <div class="guess-label">TU INTENTO</div>
 <div class="sequence-row" id="sequenceSlots">
-	<button type="button" class="sequence-slot empty" data-index="0" aria-label="Color 1"></button>
-	<button type="button" class="sequence-slot empty" data-index="1" aria-label="Color 2"></button>
-	<button type="button" class="sequence-slot empty" data-index="2" aria-label="Color 3"></button>
-	<button type="button" class="sequence-slot empty" data-index="3" aria-label="Color 4"></button>
-	<button type="button" class="sequence-slot empty" data-index="4" aria-label="Color 5"></button>
+	<!-- slots generados dinámicamente según la dificultad (5-7) -->
 </div>
 <button id="btn-order" class="order-btn" type="button">BORRAR INTENTO</button>
 <button id="btn-try" class="primary-btn" type="button">COMPROBAR</button>
@@ -71,11 +76,7 @@
 	<span class="palette-help">Tocá un color para agregarlo al orden</span>
 </div>
 <div class="palette-grid" id="paletteGrid">
-	<button class="palette-btn red" data-color="red" type="button"></button>
-	<button class="palette-btn blue" data-color="blue" type="button"></button>
-	<button class="palette-btn green" data-color="green" type="button"></button>
-	<button class="palette-btn yellow" data-color="yellow" type="button"></button>
-	<button class="palette-btn purple" data-color="purple" type="button"></button>
+	<!-- botones generados dinámicamente según la dificultad -->
 </div>
 </section>
 
@@ -110,7 +111,15 @@
 
 <section class="tip-card">
 <div class="tip-icon"><i class="fa-solid fa-lightbulb"></i></div>
-<div class="tip-text"><strong>Consejo:</strong> Ordená los colores con calma, y usá las pistas para corregir el intento.</div>
+</div>
+<div class="tip-text">
+	<strong>Consejo:</strong> Ordená los colores con calma, y usá las pistas para corregir el intento.
+	<ul>
+		<li><strong>Fácil:</strong> 5 colores, 7 intentos. No hay repeticiones; evita usar dos veces el mismo color en un intento.</li>
+		<li><strong>Medio:</strong> 6 colores, 5 intentos. Más colores y menos intentos; céntrate en los aciertos exactos.</li>
+		<li><strong>Difícil:</strong> 7 colores, 7 intentos. Pueden repetirse colores en la solución; revisá si las pistas sugieren repeticiones.</li>
+	</ul>
+</div>
 </section>
 </section>
 </main>
