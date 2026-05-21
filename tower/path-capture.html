@@ -394,18 +394,19 @@
 		}
 
 		// Preview enemy
-		let previewEl = null;
 		let previewRAF = null;
-		let previewStart = 0;
-		let previewTotal = 0;
-		let previewSegments = [];
 		let previewSpeed = 120; // px/sec
+		const previews = []; // { el, segs, total, start, mode, rotate }
 
 		function computePixelPath(route) {
+			return computePixelPathFromPoints((route.puntos || []));
+		}
+
+		function computePixelPathFromPoints(normPoints) {
 			const rect = mapImage.getBoundingClientRect();
 			const w = rect.width;
 			const h = rect.height;
-			const pts = (route.puntos || []).map(p => ({ x: p.x * w, y: p.y * h }));
+			const pts = (normPoints || []).map(p => ({ x: p.x * w, y: p.y * h }));
 			const segs = [];
 			let total = 0;
 			for (let i = 0; i < pts.length - 1; i++) {
@@ -421,72 +422,121 @@
 		}
 
 		function startPreview() {
+			stopPreview();
 			const map = ensureMapEntry();
-			const route = map.rutas[activeRoute];
-			if (!route || !route.puntos || route.puntos.length < 2) {
-				alert('La ruta debe tener al menos 2 puntos para previsualizar.');
-				return;
-			}
-			const dataPath = computePixelPath(route);
-			if (!dataPath.segs.length) return;
-			previewSegments = dataPath.segs;
-			previewTotal = dataPath.total;
 			previewSpeed = Number(previewSpeedInput.value) || 120;
-			if (!previewEl) {
-				previewEl = document.createElement('div');
-				previewEl.className = 'preview-enemy';
-				board.appendChild(previewEl);
-			}
-			previewStart = performance.now();
-			if (previewRAF) cancelAnimationFrame(previewRAF);
-			function step(now) {
-				const elapsed = (now - previewStart) / 1000; // seconds
-				let travel = (elapsed * previewSpeed);
-				const mode = previewModeSelect ? previewModeSelect.value : 'loop';
-				if (mode === 'loop') {
-					travel = travel % previewTotal;
-				} else {
-					if (travel >= previewTotal) {
-						// place at final and stop
-						const lastSeg = previewSegments[previewSegments.length - 1];
-						previewEl.style.left = (lastSeg.b.x) + 'px';
-						previewEl.style.top = (lastSeg.b.y) + 'px';
-						// apply rotation if enabled
-						if (previewRotateCheckbox && previewRotateCheckbox.checked) {
-							const angle = Math.atan2(lastSeg.dy, lastSeg.dx);
-							previewEl.style.transform = `translate(-50%,-50%) rotate(${angle}rad)`;
+			const mode = previewModeSelect ? previewModeSelect.value : 'loop';
+			const rotate = previewRotateCheckbox ? previewRotateCheckbox.checked : false;
+			// Build previews for all routes: for each spawn create one preview following spawn->puntos->final
+			// gather all spawns across routes and assign each spawn to the nearest route point
+			const routes = map.rutas || [];
+			const allSpawns = [];
+			routes.forEach((rt, ri) => {
+				(rt.spawns || []).forEach(s => allSpawns.push({ spawn: s, origRoute: ri }));
+			});
+			allSpawns.forEach((entry, sidxGlobal) => {
+				const spawn = entry.spawn;
+				// find nearest route and point index
+				let bestRoute = -1, bestPoint = -1, bestD = Infinity;
+				routes.forEach((rt, ri) => {
+					(rt.puntos || []).forEach((pt, pi) => {
+						const d = Math.hypot(spawn.x - pt.x, spawn.y - pt.y);
+						if (d < bestD) { bestD = d; bestRoute = ri; bestPoint = pi; }
+					});
+				});
+				if (bestRoute === -1) return; // no route points available
+				const route = routes[bestRoute];
+				// choose final for that route
+				let chosenFinal = null;
+				if (route.finales && route.finales.length) {
+					if ((route.puntos || []).length) {
+						const last = route.puntos[route.puntos.length - 1];
+						let best = route.finales[0];
+						let bestDf = Infinity;
+						for (const f of route.finales) {
+							const d = Math.hypot(f.x - last.x, f.y - last.y);
+							if (d < bestDf) { bestDf = d; best = f; }
 						}
-						return; // stop animation
+						chosenFinal = best;
+					} else {
+						chosenFinal = route.finales[0];
 					}
 				}
-				let dist = travel;
-				let idx = 0;
-				while (idx < previewSegments.length && dist > previewSegments[idx].len) {
-					dist -= previewSegments[idx].len;
-					idx++;
+				// build norm points starting at spawn then from bestPoint onward
+				const normPoints = [spawn].concat((route.puntos || []).slice(bestPoint));
+				if (chosenFinal) normPoints.push(chosenFinal);
+				// filter duplicates
+				function almostEqual(a, b) { return Math.hypot(a.x - b.x, a.y - b.y) < 0.0005; }
+				const filtered = [];
+				for (let i = 0; i < normPoints.length; i++) {
+					if (i === 0 || !almostEqual(normPoints[i], normPoints[i - 1])) filtered.push(normPoints[i]);
 				}
-				if (idx >= previewSegments.length) idx = previewSegments.length - 1;
-				const seg = previewSegments[idx];
-				const t = seg.len === 0 ? 0 : dist / seg.len;
-				const x = seg.a.x + seg.dx * t;
-				const y = seg.a.y + seg.dy * t;
-				previewEl.style.left = x + 'px';
-				previewEl.style.top = y + 'px';
-				if (previewRotateCheckbox && previewRotateCheckbox.checked) {
-					const angle = Math.atan2(seg.dy, seg.dx);
-					previewEl.style.transform = `translate(-50%,-50%) rotate(${angle}rad)`;
-				}
-				previewRAF = requestAnimationFrame(step);
+				if (filtered.length < 2) return;
+				const path = computePixelPathFromPoints(filtered);
+				if (!path.segs.length) return;
+				const el = document.createElement('div');
+				el.className = 'preview-enemy';
+				// color by route index for clarity
+				const colorHue = (bestRoute * 47) % 360;
+				el.style.background = `hsl(${colorHue} 85% 60%)`;
+				board.appendChild(el);
+				previews.push({ el, segs: path.segs, total: path.total, start: performance.now() + (sidxGlobal * 120), mode, rotate });
+			});
+			if (previews.length === 0) {
+				alert('No hay previews para generar (asegurate de agregar spawns).');
+				return;
 			}
-			previewRAF = requestAnimationFrame(step);
+			// start RAF loop
+			function stepAll(now) {
+				let anyRunning = false;
+				for (let i = previews.length - 1; i >= 0; i--) {
+					const p = previews[i];
+					const elapsed = (now - p.start) / 1000; // seconds
+					if (elapsed < 0) { anyRunning = true; continue; }
+					let travel = elapsed * previewSpeed;
+					if (p.mode === 'loop') travel = travel % p.total;
+					if (p.mode === 'once' && travel >= p.total) {
+						// place at final and remove this preview
+						const last = p.segs[p.segs.length - 1];
+						p.el.style.left = (last.b.x) + 'px';
+						p.el.style.top = (last.b.y) + 'px';
+						if (p.rotate) {
+							const ang = Math.atan2(last.dy, last.dx);
+							p.el.style.transform = `translate(-50%,-50%) rotate(${ang}rad)`;
+						}
+						// remove element
+						p.el.remove();
+						previews.splice(i, 1);
+						continue;
+					}
+					anyRunning = true;
+					let dist = travel;
+					let idx = 0;
+					while (idx < p.segs.length && dist > p.segs[idx].len) { dist -= p.segs[idx].len; idx++; }
+					if (idx >= p.segs.length) idx = p.segs.length - 1;
+					const seg = p.segs[idx];
+					const t = seg.len === 0 ? 0 : dist / seg.len;
+					const x = seg.a.x + seg.dx * t;
+					const y = seg.a.y + seg.dy * t;
+					p.el.style.left = x + 'px';
+					p.el.style.top = y + 'px';
+					if (p.rotate) {
+						const ang = Math.atan2(seg.dy, seg.dx);
+						p.el.style.transform = `translate(-50%,-50%) rotate(${ang}rad)`;
+					}
+				}
+				if (anyRunning) previewRAF = requestAnimationFrame(stepAll); else previewRAF = null;
+			}
+			previewRAF = requestAnimationFrame(stepAll);
 		}
 
 		function stopPreview() {
 			if (previewRAF) cancelAnimationFrame(previewRAF);
 			previewRAF = null;
-			if (previewEl) {
-				previewEl.remove();
-				previewEl = null;
+			// remove all preview elements
+			while (previews.length) {
+				const p = previews.pop();
+				if (p && p.el) p.el.remove();
 			}
 		}
 
