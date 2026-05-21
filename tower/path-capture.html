@@ -119,6 +119,23 @@
 		min-height: 520px;
 		aspect-ratio: 16 / 10;
 	}
+	.overlay-svg {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		pointer-events: none;
+	}
+	.preview-enemy {
+		position: absolute;
+		width: 12px;
+		height: 12px;
+		background: #ff4b4b;
+		border-radius: 2px;
+		transform: translate(-50%, -50%);
+		pointer-events: none;
+		box-shadow: 0 0 6px rgba(255,75,75,0.6);
+	}
 	.board img {
 		display: block;
 		width: 100%;
@@ -255,6 +272,19 @@
 				</div>
 				<div class="segment"><span>Rutas capturadas</span><strong id="routeCount">1</strong></div>
 				<div class="segment"><span>Elementos activos</span><strong id="pointCount">0</strong></div>
+				<div class="segment">
+					<span>Vista previa</span>
+					<div style="display:flex;gap:8px;align-items:center">
+						<input id="previewSpeed" type="number" value="120" min="10" style="width:84px;padding:8px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--text)" title="pixels/sec">
+						<select id="previewMode" style="padding:8px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--text)">
+							<option value="loop">Bucle</option>
+							<option value="once">Una sola pasada</option>
+						</select>
+						<label style="display:flex;align-items:center;gap:6px;margin-left:6px;color:var(--muted)"><input id="previewRotate" type="checkbox"> Rotar</label>
+						<button id="btnPreview" type="button" class="secondary">Iniciar preview</button>
+						<button id="btnStopPreview" type="button" class="secondary">Detener</button>
+					</div>
+				</div>
 				<pre id="output">const mapas = {};</pre>
 			</aside>
 		</section>
@@ -266,11 +296,16 @@
 		const output = document.getElementById('output');
 		const mapIdInput = document.getElementById('mapId');
 		const formatMode = document.getElementById('formatMode');
+		const previewSpeedInput = document.getElementById('previewSpeed');
+		const previewModeSelect = document.getElementById('previewMode');
+		const previewRotateCheckbox = document.getElementById('previewRotate');
 		const btnCopy = document.getElementById('btnCopy');
 		const btnUndo = document.getElementById('btnUndo');
 		const btnClear = document.getElementById('btnClear');
 		const btnNewRoute = document.getElementById('btnNewRoute');
 		const btnUndoRoute = document.getElementById('btnUndoRoute');
+		const btnPreview = document.getElementById('btnPreview');
+		const btnStopPreview = document.getElementById('btnStopPreview');
 		const routeCount = document.getElementById('routeCount');
 		const pointCount = document.getElementById('pointCount');
 		const modeButtons = Array.from(document.querySelectorAll('.mode-btn'));
@@ -329,6 +364,149 @@
 			while (markers.length) markers.pop().remove();
 		}
 
+		// SVG overlay for drawing polylines
+		const svgNS = 'http://www.w3.org/2000/svg';
+		let overlaySvg = document.createElementNS(svgNS, 'svg');
+		overlaySvg.setAttribute('class', 'overlay-svg');
+		overlaySvg.setAttribute('aria-hidden', 'true');
+		board.appendChild(overlaySvg);
+
+		function drawRoutes() {
+			overlaySvg.innerHTML = '';
+			const map = ensureMapEntry();
+			const rect = mapImage.getBoundingClientRect();
+			const w = rect.width;
+			const h = rect.height;
+			overlaySvg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+			overlaySvg.setAttribute('preserveAspectRatio', 'none');
+			(map.rutas || []).forEach((route, idx) => {
+				if (!route || !route.puntos || route.puntos.length === 0) return;
+				const poly = document.createElementNS(svgNS, 'polyline');
+				const points = route.puntos.map(p => `${p.x * w},${p.y * h}`).join(' ');
+				poly.setAttribute('points', points);
+				poly.setAttribute('fill', 'none');
+				poly.setAttribute('stroke', idx === activeRoute ? '#8bef5b' : 'rgba(139,239,91,0.45)');
+				poly.setAttribute('stroke-width', idx === activeRoute ? '4' : '2');
+				poly.setAttribute('stroke-linecap', 'round');
+				poly.setAttribute('stroke-linejoin', 'round');
+				overlaySvg.appendChild(poly);
+			});
+		}
+
+		// Preview enemy
+		let previewEl = null;
+		let previewRAF = null;
+		let previewStart = 0;
+		let previewTotal = 0;
+		let previewSegments = [];
+		let previewSpeed = 120; // px/sec
+
+		function computePixelPath(route) {
+			const rect = mapImage.getBoundingClientRect();
+			const w = rect.width;
+			const h = rect.height;
+			const pts = (route.puntos || []).map(p => ({ x: p.x * w, y: p.y * h }));
+			const segs = [];
+			let total = 0;
+			for (let i = 0; i < pts.length - 1; i++) {
+				const a = pts[i];
+				const b = pts[i + 1];
+				const dx = b.x - a.x;
+				const dy = b.y - a.y;
+				const len = Math.hypot(dx, dy);
+				segs.push({ a, b, len, dx, dy });
+				total += len;
+			}
+			return { pts, segs, total };
+		}
+
+		function startPreview() {
+			const map = ensureMapEntry();
+			const route = map.rutas[activeRoute];
+			if (!route || !route.puntos || route.puntos.length < 2) {
+				alert('La ruta debe tener al menos 2 puntos para previsualizar.');
+				return;
+			}
+			const dataPath = computePixelPath(route);
+			if (!dataPath.segs.length) return;
+			previewSegments = dataPath.segs;
+			previewTotal = dataPath.total;
+			previewSpeed = Number(previewSpeedInput.value) || 120;
+			if (!previewEl) {
+				previewEl = document.createElement('div');
+				previewEl.className = 'preview-enemy';
+				board.appendChild(previewEl);
+			}
+			previewStart = performance.now();
+			if (previewRAF) cancelAnimationFrame(previewRAF);
+			function step(now) {
+				const elapsed = (now - previewStart) / 1000; // seconds
+				let travel = (elapsed * previewSpeed);
+				const mode = previewModeSelect ? previewModeSelect.value : 'loop';
+				if (mode === 'loop') {
+					travel = travel % previewTotal;
+				} else {
+					if (travel >= previewTotal) {
+						// place at final and stop
+						const lastSeg = previewSegments[previewSegments.length - 1];
+						previewEl.style.left = (lastSeg.b.x) + 'px';
+						previewEl.style.top = (lastSeg.b.y) + 'px';
+						// apply rotation if enabled
+						if (previewRotateCheckbox && previewRotateCheckbox.checked) {
+							const angle = Math.atan2(lastSeg.dy, lastSeg.dx);
+							previewEl.style.transform = `translate(-50%,-50%) rotate(${angle}rad)`;
+						}
+						return; // stop animation
+					}
+				}
+				let dist = travel;
+				let idx = 0;
+				while (idx < previewSegments.length && dist > previewSegments[idx].len) {
+					dist -= previewSegments[idx].len;
+					idx++;
+				}
+				if (idx >= previewSegments.length) idx = previewSegments.length - 1;
+				const seg = previewSegments[idx];
+				const t = seg.len === 0 ? 0 : dist / seg.len;
+				const x = seg.a.x + seg.dx * t;
+				const y = seg.a.y + seg.dy * t;
+				previewEl.style.left = x + 'px';
+				previewEl.style.top = y + 'px';
+				if (previewRotateCheckbox && previewRotateCheckbox.checked) {
+					const angle = Math.atan2(seg.dy, seg.dx);
+					previewEl.style.transform = `translate(-50%,-50%) rotate(${angle}rad)`;
+				}
+				previewRAF = requestAnimationFrame(step);
+			}
+			previewRAF = requestAnimationFrame(step);
+		}
+
+		function stopPreview() {
+			if (previewRAF) cancelAnimationFrame(previewRAF);
+			previewRAF = null;
+			if (previewEl) {
+				previewEl.remove();
+				previewEl = null;
+			}
+		}
+
+		// Wire preview controls and resize/load handlers
+		btnPreview.addEventListener('click', startPreview);
+		btnStopPreview.addEventListener('click', stopPreview);
+		mapImage.addEventListener('load', () => {
+			redrawMarkers();
+			drawRoutes();
+		});
+		window.addEventListener('resize', () => {
+			redrawMarkers();
+			drawRoutes();
+			// if preview running, restart to recalc segments with new sizes
+			if (previewRAF) {
+				stopPreview();
+				startPreview();
+			}
+		});
+
 		function addMarkerStyled(x, y, kind) {
 			const marker = document.createElement('div');
 			marker.className = 'marker';
@@ -353,6 +531,7 @@
 			(map.zonasTorres || [[]]).forEach((zone) => {
 				zone.forEach((point) => addMarkerStyled(point.x, point.y, 'zone'));
 			});
+			drawRoutes();
 		}
 
 		function render() {
