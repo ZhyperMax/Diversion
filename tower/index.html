@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Memotest — Juegos Salta</title>
+<title>Tower Defense — Juegos Salta</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
 <link rel="stylesheet" href="./portal.css">
 </head>
@@ -14,46 +14,45 @@
 				<a class="portal-back" href="../juegos/index.html" aria-label="Volver al portal de juegos">
 					<i class="fa-solid fa-chevron-left"></i>
 				</a>
-					<div class="portal-brand-mark"><img src="../img/memotest.png" alt="Memotest logo"></div>
-					<div class="portal-brand-text">
-						<span class="brand-top">MEMOTEST</span>
-						<span class="brand-bottom">PARES</span>
-					</div>
+				<div class="portal-brand-mark"><img src="../img/CannonTower.png" alt="Tower Defense logo"></div>
+				<div class="portal-brand-text">
+					<span class="brand-top">TOWER</span>
+					<span class="brand-bottom">DEFENSE</span>
+				</div>
 			</div>
 
 			<nav class="portal-nav" aria-label="Navegación del juego">
 				<a class="active" href="#"><i class="fa-solid fa-house"></i> Inicio</a>
-					<a href="#modes"><i class="fa-solid fa-gamepad"></i> Memotest</a>
-				<a href="#"><i class="fa-solid fa-trophy"></i> Ranking</a>
+				<a href="#modes"><i class="fa-solid fa-gamepad"></i> Single Player</a>
+				<a href="#"><i class="fa-solid fa-tower-observation"></i> Torretas</a>
+				<a href="#"><i class="fa-solid fa-wind"></i> Oleadas</a>
 				<a href="#"><i class="fa-solid fa-chart-simple"></i> Estadísticas</a>
-				<a href="#"><i class="fa-solid fa-comments"></i> Mis salas</a>
-				<a href="#"><i class="fa-solid fa-gift"></i> Recompensas</a>
 				<a href="#"><i class="fa-regular fa-circle-question"></i> Cómo jugar</a>
 			</nav>
 
 			<div class="portal-daily">
 				<h3><i class="fa-solid fa-bullseye"></i> Desafío diario</h3>
-				<p>Encontrá 8 pares en el desafío diario.</p>
-				<div class="daily-meta">Recompensa: 100 <span>🪙</span></div>
-				<div class="daily-progress"><span style="width: 38%"></span></div>
-				<div class="daily-count">1 / 1</div>
+				<p>Sobrevive a las 2 oleadas sin dejar pasar demasiados enemigos.</p>
+				<div class="daily-meta">Recompensa: fama del reino</div>
+				<div class="daily-progress"><span style="width: 42%"></span></div>
+				<div class="daily-count">2 / 2 oleadas</div>
 			</div>
 		</aside>
 
 		<main class="portal-main">
 			<header class="portal-topbar">
 				<div>
-					<h1 class="portal-title">MEMOTEST <span>PARES</span></h1>
-					<p class="portal-subtitle">Encuentra los pares y mejora tu memoria — solo o con amigos.</p>
+					<h1 class="portal-title">TOWER <span>DEFENSE</span></h1>
+					<p class="portal-subtitle">Defendé el camino, colocá torres libremente y frená las 2 oleadas enemigas.</p>
 				</div>
 
 				<div class="portal-profile">
-					<div class="profile-avatar">MR</div>
+					<div class="profile-avatar">TD</div>
 					<div class="profile-copy">
-						<strong>MotoRider</strong>
-						<small>Nivel 24</small>
+						<strong>Defensa del reino</strong>
+						<small>Nivel 1</small>
 						<div class="profile-bar"><span></span></div>
-						<small class="profile-xp">2.450 / 3.500 XP</small>
+						<small class="profile-xp">0 / 100 XP</small>
 					</div>
 					<i class="fa-solid fa-gear profile-gear"></i>
 				</div>
@@ -63,11 +62,11 @@
 				<div class="portal-main-col">
 					<section class="hero-card">
 						<div class="hero-copy">
-							<h2>MEMOTEST <span>EN LÍNEA</span></h2>
-							<p>Voltea cartas y encuentra las parejas antes que tus oponentes.</p>
+							<h2>DEFENDE EL <span>MAPA</span></h2>
+							<p>Ubicá torres sobre el terreno, seguí el camino de la ruta y eliminá cada enemigo antes de que llegue al final.</p>
 						</div>
 						<div class="hero-art">
-							<img src="../img/memotest.png" alt="Memotest" style="max-width:160px">
+							<img src="./img/mapa1.png" alt="Mapa del tower defense" style="max-width:240px">
 						</div>
 					</section>
 
@@ -76,15 +75,15 @@
 						<a class="mode-card mode-single" href="./singleplayer.html">
 							<div class="mode-icon"><i class="fa-solid fa-user"></i></div>
 							<div class="mode-title">SINGLE PLAYER</div>
-							<p>Juega solo y desafía tu mejor marca.</p>
+							<p>Colocá torres sin costo y resistí las 2 oleadas.</p>
 							<span class="mode-btn">JUGAR SOLO</span>
 						</a>
 
 						<a class="mode-card mode-multi" href="#">
 							<div class="mode-icon"><i class="fa-solid fa-users"></i></div>
-							<div class="mode-title">MULTIPLAYER</div>
-							<p>Crea o únete a una sala y juega con otros.</p>
-							<span class="mode-btn">JUGAR ONLINE</span>
+							<div class="mode-title">PRÓXIMAMENTE</div>
+							<p>Después sumamos oleadas extras, mejoras y más enemigos.</p>
+							<span class="mode-btn">EN DESARROLLO</span>
 						</a>
 					</div>
 				</div>
@@ -92,40 +91,40 @@
 				<aside class="portal-side">
 					<section class="side-card ranking-card">
 						<div class="card-head">
-							<h4><i class="fa-solid fa-crown"></i> RANKING GLOBAL</h4>
+							<h4><i class="fa-solid fa-crown"></i> RANKING DEL REINO</h4>
 							<a href="#">Ver completo →</a>
 						</div>
 						<div class="ranking-list">
-							<div class="ranking-item"><span class="medal gold">👑</span><div class="rank-avatar">V</div><div class="rank-name">Valen</div><strong>12.450 pts</strong></div>
-							<div class="ranking-item"><span class="medal silver">🥈</span><div class="rank-avatar">MR</div><div class="rank-name">MotoRider</div><strong>9.870 pts</strong></div>
-							<div class="ranking-item"><span class="medal bronze">🥉</span><div class="rank-avatar">C</div><div class="rank-name">Carlos</div><strong>7.650 pts</strong></div>
-							<div class="ranking-item"><span class="rank-index">4</span><div class="rank-avatar">S</div><div class="rank-name">Sofía</div><strong>6.300 pts</strong></div>
-							<div class="ranking-item"><span class="rank-index">5</span><div class="rank-avatar">L</div><div class="rank-name">Luis</div><strong>5.210 pts</strong></div>
+								<div class="ranking-item"><span class="medal gold">👑</span><div class="rank-avatar">A</div><div class="rank-name">Aldea</div><strong>2 oleadas</strong></div>
+								<div class="ranking-item"><span class="medal silver">🥈</span><div class="rank-avatar">T</div><div class="rank-name">Torres</div><strong>1 oleada</strong></div>
+								<div class="ranking-item"><span class="medal bronze">🥉</span><div class="rank-avatar">R</div><div class="rank-name">Ruta</div><strong>0 oleadas</strong></div>
+								<div class="ranking-item"><span class="rank-index">4</span><div class="rank-avatar">G</div><div class="rank-name">Guardianes</div><strong>0 oleadas</strong></div>
+								<div class="ranking-item"><span class="rank-index">5</span><div class="rank-avatar">B</div><div class="rank-name">Bosque</div><strong>0 oleadas</strong></div>
 						</div>
 					</section>
 
 					<section class="side-card stats-card">
 						<h4><i class="fa-solid fa-chart-line"></i> TU MEJOR MARCA</h4>
-						<div class="stat-row"><span><i class="fa-solid fa-bullseye"></i> Mejor puntaje</span><strong>9.870</strong></div>
-						<div class="stat-row"><span><i class="fa-solid fa-trophy"></i> Partidas jugadas</span><strong>128</strong></div>
-						<div class="stat-row"><span><i class="fa-solid fa-bolt"></i> Mejor racha</span><strong>15 <small>victorias</small></strong></div>
+						<div class="stat-row"><span><i class="fa-solid fa-bullseye"></i> Enemigos detenidos</span><strong>0</strong></div>
+						<div class="stat-row"><span><i class="fa-solid fa-trophy"></i> Partidas jugadas</span><strong>0</strong></div>
+						<div class="stat-row"><span><i class="fa-solid fa-bolt"></i> Oleadas superadas</span><strong>0 <small>de 2</small></strong></div>
 					</section>
 
 					<section class="side-card how-card">
 						<h4><i class="fa-solid fa-circle-info"></i> CÓMO SE JUEGA</h4>
 						<ul>
-							<li>El tablero contiene parejas de cartas ocultas.</li>
-							<li>Volteá dos cartas por turno para buscar parejas.</li>
-							<li>Encuentra todas las parejas para llevarte la victoria.</li>
+							<li>Hacé click sobre el mapa para colocar una torre.</li>
+							<li>Las torres disparan automáticamente a los enemigos cercanos.</li>
+							<li>Completá las 2 oleadas de 10 enemigos para ganar.</li>
 						</ul>
 					</section>
 
 					<section class="side-card reward-card">
 						<div>
 							<h4><i class="fa-solid fa-gift"></i> RECOMPENSA SEMANAL</h4>
-							<p>Juega 5 partidas esta semana</p>
+							<p>Sobrevive 5 partidas esta semana</p>
 							<div class="daily-progress reward-progress"><span></span></div>
-							<div class="reward-count">3 / 5</div>
+							<div class="reward-count">0 / 5</div>
 						</div>
 						<div class="gift-icon">🎁</div>
 					</section>

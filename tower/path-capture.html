@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tower Defense - Captura de coordenadas</title>
+<style>
+	:root {
+		--bg: #071410;
+		--panel: rgba(10, 22, 16, 0.92);
+		--line: rgba(255, 255, 255, 0.08);
+		--text: #eef6ea;
+		--muted: #9ab09a;
+		--green: #8bef5b;
+	}
+	* { box-sizing: border-box; }
+	body {
+		margin: 0;
+		min-height: 100vh;
+		font-family: Segoe UI, system-ui, Arial, sans-serif;
+		background: radial-gradient(circle at top, rgba(139, 239, 91, 0.12), transparent 20%), var(--bg);
+		color: var(--text);
+	}
+	.main {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 16px;
+	}
+	.header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 12px;
+		flex-wrap: wrap;
+		padding: 14px 16px;
+		background: var(--panel);
+		border: 1px solid var(--line);
+		border-radius: 18px;
+	}
+	.header h1 {
+		margin: 0;
+		font-size: 1.2rem;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+	}
+	.header p { margin: 6px 0 0; color: var(--muted); }
+	.controls {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 10px;
+		width: 100%;
+		margin-top: 12px;
+	}
+	.control {
+		display: grid;
+		gap: 6px;
+	}
+	.control label {
+		font-size: 0.8rem;
+		font-weight: 700;
+		color: var(--muted);
+	}
+	.control input,
+	.control select {
+		width: 100%;
+		padding: 12px 12px;
+		border-radius: 12px;
+		border: 1px solid var(--line);
+		background: rgba(255, 255, 255, 0.05);
+		color: var(--text);
+		font: inherit;
+	}
+	.modes {
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 8px;
+		margin-top: 12px;
+	}
+	.mode-btn {
+		padding: 10px 12px;
+		border-radius: 12px;
+		border: 1px solid var(--line);
+		background: rgba(255, 255, 255, 0.05);
+		color: var(--text);
+		font-weight: 800;
+		text-transform: uppercase;
+	}
+	.mode-btn.active {
+		background: rgba(139, 239, 91, 0.18);
+		border-color: rgba(139, 239, 91, 0.36);
+	}
+	.actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+	button {
+		border: 0;
+		border-radius: 12px;
+		padding: 12px 14px;
+		font-weight: 800;
+		cursor: pointer;
+		color: #08101f;
+		background: linear-gradient(180deg, var(--green), #5bc13b);
+	}
+	button.secondary {
+		background: rgba(255, 255, 255, 0.08);
+		color: var(--text);
+		border: 1px solid var(--line);
+	}
+	.board-wrap {
+		margin-top: 14px;
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 320px;
+		gap: 14px;
+	}
+	.board {
+		position: relative;
+		border-radius: 20px;
+		overflow: hidden;
+		border: 1px solid var(--line);
+		background: #162a18;
+		min-height: 520px;
+		aspect-ratio: 16 / 10;
+	}
+	.board img {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+		user-select: none;
+	}
+	.marker {
+		position: absolute;
+		width: 14px;
+		height: 14px;
+		border-radius: 50%;
+		border: 2px solid #fff;
+		background: rgba(139, 239, 91, 0.95);
+		transform: translate(-50%, -50%);
+		pointer-events: none;
+		box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.22);
+	}
+	.panel {
+		padding: 14px;
+		background: var(--panel);
+		border: 1px solid var(--line);
+		border-radius: 18px;
+		display: grid;
+		gap: 12px;
+		align-content: start;
+	}
+	.panel .segment {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 8px;
+		padding: 10px 12px;
+		border-radius: 12px;
+		background: rgba(255, 255, 255, 0.04);
+		border: 1px solid var(--line);
+	}
+	.legend {
+		display: grid;
+		gap: 8px;
+	}
+	.legend-item {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		font-size: 0.9rem;
+		color: var(--muted);
+	}
+	.legend-swatch {
+		width: 14px;
+		height: 14px;
+		border-radius: 50%;
+		border: 2px solid rgba(255, 255, 255, 0.85);
+	}
+	.legend-swatch.route { background: #8bef5b; }
+	.legend-swatch.zone { background: #ffcf2e; }
+	.legend-swatch.spawn { background: #5cc2ff; }
+	.legend-swatch.final { background: #ff6b6b; }
+	.panel h2 {
+		margin: 0;
+		font-size: 0.95rem;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+	}
+	.panel pre {
+		margin: 0;
+		padding: 12px;
+		border-radius: 12px;
+		background: rgba(0, 0, 0, 0.24);
+		border: 1px solid var(--line);
+		color: #d8ead3;
+		max-height: 440px;
+		overflow: auto;
+		white-space: pre-wrap;
+	}
+	.panel .hint { color: var(--muted); font-size: 0.92rem; line-height: 1.4; }
+	@media (max-width: 980px) {
+		.board-wrap { grid-template-columns: 1fr; }
+		.board { min-height: 360px; aspect-ratio: 16 / 11; }
+		.controls { grid-template-columns: 1fr; }
+	}
+</style>
+</head>
+<body>
+	<main class="main">
+		<section class="header">
+			<div>
+				<h1>Tower Defense - Captura de coordenadas</h1>
+				<p>Hacé click en el mapa para guardar puntos normalizados entre 0 y 1. Soporta múltiples rutas y futuros mapas.</p>
+				<div class="controls">
+					<div class="control">
+						<label for="mapId">Mapa</label>
+						<input id="mapId" type="text" value="mapa1" autocomplete="off">
+					</div>
+					<div class="control">
+						<label for="formatMode">Formato de salida</label>
+						<select id="formatMode">
+							<option value="object">Objeto por mapa</option>
+							<option value="array">Solo rutas</option>
+						</select>
+					</div>
+				</div>
+				<div class="modes" role="tablist" aria-label="Modo de captura">
+					<button type="button" class="mode-btn active" data-mode="route">Ruta</button>
+					<button type="button" class="mode-btn" data-mode="zone">Zona torres</button>
+					<button type="button" class="mode-btn" data-mode="spawn">Spawn</button>
+					<button type="button" class="mode-btn" data-mode="finish">Final</button>
+				</div>
+			</div>
+			<div class="actions">
+				<button id="btnNewRoute" type="button" class="secondary">Nueva ruta</button>
+				<button id="btnUndoRoute" type="button" class="secondary">Borrar última ruta</button>
+				<button id="btnCopy" type="button">Copiar coordenadas</button>
+				<button id="btnUndo" type="button" class="secondary">Borrar último</button>
+				<button id="btnClear" type="button" class="secondary">Limpiar</button>
+			</div>
+		</section>
+
+		<section class="board-wrap">
+			<div class="board" id="board">
+				<img src="./img/mapa1.png" alt="Mapa de referencia" id="mapImage">
+			</div>
+			<aside class="panel">
+				<h2>rutas</h2>
+				<div class="hint">Cada click se guarda según el modo activo. Usá colores distintos para mapear rutas, zonas de torres, spawn y final.</div>
+				<div class="legend">
+					<div class="legend-item"><span class="legend-swatch route"></span>Ruta</div>
+					<div class="legend-item"><span class="legend-swatch zone"></span>Zona de torres</div>
+					<div class="legend-item"><span class="legend-swatch spawn"></span>Spawn</div>
+					<div class="legend-item"><span class="legend-swatch final"></span>Final</div>
+				</div>
+				<div class="segment"><span>Rutas capturadas</span><strong id="routeCount">1</strong></div>
+				<div class="segment"><span>Puntos activos</span><strong id="pointCount">0</strong></div>
+				<pre id="output">const mapas = {};</pre>
+			</aside>
+		</section>
+	</main>
+
+	<script>
+		const board = document.getElementById('board');
+		const mapImage = document.getElementById('mapImage');
+		const output = document.getElementById('output');
+		const mapIdInput = document.getElementById('mapId');
+		const formatMode = document.getElementById('formatMode');
+		const btnCopy = document.getElementById('btnCopy');
+		const btnUndo = document.getElementById('btnUndo');
+		const btnClear = document.getElementById('btnClear');
+		const btnNewRoute = document.getElementById('btnNewRoute');
+		const btnUndoRoute = document.getElementById('btnUndoRoute');
+		const routeCount = document.getElementById('routeCount');
+		const pointCount = document.getElementById('pointCount');
+		const modeButtons = Array.from(document.querySelectorAll('.mode-btn'));
+
+		const data = {
+			mapa1: {
+				rutas: [[]],
+				zonasTorres: [[]],
+				spawn: null,
+				final: null
+			}
+		};
+		let activeRoute = 0;
+		let activeMode = 'route';
+		let activeZone = 0;
+		const markers = [];
+
+		function getCurrentMapId() {
+			const value = mapIdInput.value.trim();
+			return value || 'mapa1';
+		}
+
+		function ensureMapEntry() {
+			const mapId = getCurrentMapId();
+			if (!data[mapId]) {
+				data[mapId] = { rutas: [[]], zonasTorres: [[]], spawn: null, final: null };
+				activeRoute = 0;
+				activeZone = 0;
+				clearMarkers();
+			}
+			return data[mapId];
+		}
+
+		function getActiveRoutes() {
+			return ensureMapEntry().rutas;
+		}
+
+		function getActiveRoute() {
+			const routes = getActiveRoutes();
+			if (!routes[activeRoute]) routes[activeRoute] = [];
+			return routes[activeRoute];
+		}
+
+		function getActiveZones() {
+			const map = ensureMapEntry();
+			if (!map.zonasTorres) map.zonasTorres = [[]];
+			if (!map.zonasTorres[activeZone]) map.zonasTorres[activeZone] = [];
+			return map.zonasTorres;
+		}
+
+		function getActiveZone() {
+			return getActiveZones()[activeZone];
+		}
+
+		function clearMarkers() {
+			while (markers.length) markers.pop().remove();
+		}
+
+		function addMarker(x, y) {
+			const marker = document.createElement('div');
+			marker.className = 'marker';
+			marker.style.left = (x * 100) + '%';
+			marker.style.top = (y * 100) + '%';
+			board.appendChild(marker);
+			markers.push(marker);
+		}
+
+		function addMarkerStyled(x, y, kind) {
+			const marker = document.createElement('div');
+			marker.className = 'marker';
+			marker.style.left = (x * 100) + '%';
+			marker.style.top = (y * 100) + '%';
+			if (kind === 'route') marker.style.background = '#8bef5b';
+			if (kind === 'zone') marker.style.background = '#ffcf2e';
+			if (kind === 'spawn') marker.style.background = '#5cc2ff';
+			if (kind === 'final') marker.style.background = '#ff6b6b';
+			board.appendChild(marker);
+			markers.push(marker);
+		}
+
+		function redrawMarkers() {
+			clearMarkers();
+			const map = ensureMapEntry();
+			(map.rutas || [[]]).forEach((route) => {
+				route.forEach((point) => addMarkerStyled(point.x, point.y, 'route'));
+			});
+			(map.zonasTorres || [[]]).forEach((zone) => {
+				zone.forEach((point) => addMarkerStyled(point.x, point.y, 'zone'));
+			});
+			if (map.spawn) addMarkerStyled(map.spawn.x, map.spawn.y, 'spawn');
+			if (map.final) addMarkerStyled(map.final.x, map.final.y, 'final');
+		}
+
+		function render() {
+			const mapId = getCurrentMapId();
+			const payload = data[mapId] || { rutas: [[]], zonasTorres: [[]], spawn: null, final: null };
+			routeCount.textContent = String(payload.rutas.length);
+			if (activeMode === 'zone') {
+				pointCount.textContent = String((payload.zonasTorres[activeZone] || []).length);
+			} else if (activeMode === 'spawn') {
+				pointCount.textContent = payload.spawn ? '1' : '0';
+			} else if (activeMode === 'finish') {
+				pointCount.textContent = payload.final ? '1' : '0';
+			} else {
+				pointCount.textContent = String((payload.rutas[activeRoute] || []).length);
+			}
+			if (formatMode.value === 'array') {
+				output.textContent = 'const rutas = ' + JSON.stringify(payload.rutas, null, 2) + ';';
+			} else {
+				output.textContent = 'const mapas = ' + JSON.stringify({ [mapId]: payload }, null, 2) + ';';
+			}
+		}
+
+		function setMode(mode) {
+			activeMode = mode;
+			modeButtons.forEach((button) => button.classList.toggle('active', button.dataset.mode === mode));
+			render();
+		}
+
+		board.addEventListener('click', (e) => {
+			const rect = mapImage.getBoundingClientRect();
+			const xPx = e.clientX - rect.left;
+			const yPx = e.clientY - rect.top;
+			if (xPx < 0 || yPx < 0 || xPx > rect.width || yPx > rect.height) return;
+
+			const x = Number((xPx / rect.width).toFixed(4));
+			const y = Number((yPx / rect.height).toFixed(4));
+
+			if (activeMode === 'route') {
+				getActiveRoute().push({ x, y });
+				addMarkerStyled(x, y, 'route');
+			} else if (activeMode === 'zone') {
+				getActiveZone().push({ x, y });
+				addMarkerStyled(x, y, 'zone');
+			} else if (activeMode === 'spawn') {
+				data[getCurrentMapId()].spawn = { x, y };
+				redrawMarkers();
+			} else if (activeMode === 'finish') {
+				data[getCurrentMapId()].final = { x, y };
+				redrawMarkers();
+			}
+
+			console.log(data);
+			render();
+		});
+
+		btnUndo.addEventListener('click', () => {
+			const route = getActiveRoute();
+			route.pop();
+			const marker = markers.pop();
+			if (marker) marker.remove();
+			render();
+		});
+
+		btnNewRoute.addEventListener('click', () => {
+			if (activeMode === 'zone') {
+				const zones = getActiveZones();
+				zones.push([]);
+				activeZone = zones.length - 1;
+				redrawMarkers();
+			} else {
+				const routes = getActiveRoutes();
+				routes.push([]);
+				activeRoute = routes.length - 1;
+				redrawMarkers();
+			}
+			render();
+		});
+
+		btnUndoRoute.addEventListener('click', () => {
+			if (activeMode === 'zone') {
+				const zones = getActiveZones();
+				if (zones.length <= 1) return;
+				zones.pop();
+				activeZone = Math.max(0, zones.length - 1);
+			} else {
+				const routes = getActiveRoutes();
+				if (routes.length <= 1) return;
+				routes.pop();
+				activeRoute = Math.max(0, routes.length - 1);
+			}
+			redrawMarkers();
+			render();
+		});
+
+		btnClear.addEventListener('click', () => {
+			data[getCurrentMapId()] = { rutas: [[]], zonasTorres: [[]], spawn: null, final: null };
+			activeRoute = 0;
+			activeZone = 0;
+			clearMarkers();
+			render();
+		});
+
+		btnCopy.addEventListener('click', async () => {
+			try {
+				await navigator.clipboard.writeText(output.textContent);
+				btnCopy.textContent = 'Copiado';
+				setTimeout(() => (btnCopy.textContent = 'Copiar coordenadas'), 1000);
+			} catch {
+				alert('No se pudo copiar automáticamente. Copia el texto del panel.');
+			}
+		});
+
+		mapIdInput.addEventListener('change', () => {
+			activeRoute = 0;
+			ensureMapEntry();
+			redrawMarkers();
+			render();
+		});
+
+		formatMode.addEventListener('change', render);
+		modeButtons.forEach((button) => {
+			button.addEventListener('click', () => setMode(button.dataset.mode));
+		});
+
+		redrawMarkers();
+		setMode('route');
+		render();
+	</script>
+</body>
+</html>
